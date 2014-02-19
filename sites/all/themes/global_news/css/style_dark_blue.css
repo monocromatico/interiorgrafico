@@ -1,0 +1,27 @@
+/* News Portal blue */
+.section-1 {
+  background: #122e4e;
+  border-bottom: 1px solid #0f2640;
+}
+
+.section-2 {
+  background: #163a61;
+  border-top: 1px solid #305072;
+}
+
+#block-search-form .container-inline, #search-block-form .container-inline {
+	background: #2d4d70;
+	border-bottom: 1px solid #4c6886;
+	border-top: 1px solid #1c3045;
+}
+
+
+#block-system-main-menu .menu li a.active-trail,
+#block-system-main-menu .menu li a.active,
+.view-breaking-news .view-header,
+.quicktabs-wrapper .quicktabs-tabs .active a,
+.views-field-comment-count a,
+.views-field-term-node-tid a,
+#block-system-main-menu .menu li a:hover {
+	color: #163a61 !important;
+}

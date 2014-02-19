@@ -1,0 +1,89 @@
+; $Id: global_news.info,v 1.9 Leo Exp $
+
+; Theme Info -----------------------------------------------------------------
+; required information about the theme
+
+name = global_news
+description = News portal site
+screenshot = screenshot.png
+core = 7.x
+engine = phptemplate
+
+; Stylesheets  ---------------------------------------------------------------
+; We use [screen] instead of [all] to avoid browser styles affecting 
+; other media types. IE stylesheets are loaded through template.php
+
+stylesheets[screen][] = css/boilerplate.css
+stylesheets[screen][] = css/style.css
+stylesheets[screen][] = css/common.css
+stylesheets[screen][] = css/responsive.css
+
+stylesheets[screen][] = css/style_red.css
+stylesheets[screen][] = css/style_blue.css
+stylesheets[screen][] = css/style_orange.css
+stylesheets[screen][] = css/style_green.css
+stylesheets[screen][] = css/style_grey.css
+stylesheets[screen][] = css/style_dark_blue.css
+stylesheets[screen][] = css/style_dark_grey.css
+stylesheets[screen][] = css/maintenance-page.css
+
+styleswitcher[css][Red] = css/style_red.css
+styleswitcher[css][Blue] = css/style_blue.css
+styleswitcher[css][Orange] = css/style_orange.css
+styleswitcher[css][Green] = css/style_green.css
+styleswitcher[css][Grey] = css/style_grey.css
+styleswitcher[css][Dark Blue] = css/style_dark_blue.css
+styleswitcher[css][Black] = css/style_dark_grey.css
+
+
+scripts[] = js/global_news.core.js
+scripts[] = js/jquery.loader.js
+scripts[] = js/jquery-ui.min.js
+
+; Regions --------------------------------------------------------------------
+; these content regions are available for block placement
+; some are special hidden regions: page_top, page_bottom, and help
+
+; these are the stock regions
+regions[topbar]         = 'Top bar'
+regions[header]         = 'Header'
+regions[navigation]     = 'Navigation'
+
+regions[showcase] 		= 'Showcase'
+regions[maintop]   		= 'Maintop'
+regions[above_content] 	= 'Above Content'
+regions[mainbottom] 	= 'Mainbottom'
+
+regions[top_content]    = 'Top Content'
+regions[content]        = 'Content'
+regions[sidebar_first]  = 'Sidebar First'
+regions[sidebar_second] = 'Sidebar Second'
+
+regions[footer]         = 'Footer'
+
+regions[tools] 			= 'Tools'
+
+regions[highlighted]    = 'Highlighted'
+regions[help]           = 'Help'
+
+; Options --------------------------------------------------------------------
+; these are the checkboxes that are available on the theme settings page.
+
+; additional theme settings
+settings[global_news_feed_icons] = 0
+settings[global_news_clear_registry] = 0
+settings[global_news_tabs_float] = 0
+settings[global_news_tabs_node] = 1
+settings[global_news_theme_styling_color] = red
+settings[global_news_date_output] = 1
+settings[global_news_layout] = 1
+settings[global_news_breadcrumb_display]   = yes
+settings[global_news_breadcrumb_hideonlyfront] = 1
+settings[global_news_breadcrumb_showtitle] = 0
+settings[global_news_breadcrumb_separator] = '/'
+
+; Information added by drupal.org packaging script on 2011-11-10
+version = "7.x-1.0"
+core = "7.x"
+project = "global_news"
+datestamp = "1320946536"

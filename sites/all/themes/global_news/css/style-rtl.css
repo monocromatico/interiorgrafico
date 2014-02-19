@@ -1,0 +1,186 @@
+/*RTL styles*/
+
+/*general styles*/
+.flex-viewport,
+#tools,
+.item-list .pager {
+	direction: ltr;
+}
+
+#block-system-main-menu .menu li,
+#block-menu-menu-footer-menu .menu li {
+	background-position: left;
+	float: none;
+	display: inline-block;
+}
+#block-system-main-menu .dropdown-menu li a{
+	padding: 0 11px 0 13px;
+}
+#block-menu-menu-footer-menu .menu li.first {
+	padding-left: 12px;
+}
+
+.views-field-created {
+	float: right;
+	margin: 0 0 0 10px;
+}
+
+ol,ul {
+	padding: 0 10px 0 0;
+	margin: 0 10px 0 0;
+}
+
+#block-node-syndicate .content img {
+	margin: 0 10px 0 0;
+}
+
+/*breaking-news*/
+.view-breaking-news .flex-viewport {
+	direction: rtl;
+}
+.view-breaking-news .view-header {
+	float: right;
+	padding: 0 0 0 10px;
+}
+
+.view-breaking-news .flex-prev {
+	left: 0 !important;
+	right: auto;
+}
+.view-breaking-news .flex-next {
+	left: 34px;
+	right: auto !important;
+}
+.view-breaking-news .flex-pause {
+	right: auto;
+	left: 17px;
+}
+
+/*general more link*/
+.more-link {
+	text-align: right;
+}
+
+
+/*video slider*/
+.quicktabs-wrapper .item-list {
+	padding: 6px 10px 5px 0;
+}
+
+.view-video-slider-thumbnails .flex-prev {
+	left: 0 !important;
+	right: auto;
+}
+.view-video-slider-thumbnails .flex-next {
+	left: 17px;
+	right: auto!important;
+}
+
+/*editor's choice*/
+.view-editor-s-choice ul.slides li {
+	direction: rtl;
+}
+
+.view-editor-s-choice .views-field-field-image {
+	float: right;
+	margin: 0 0 0 15px;
+}
+
+.view-editor-s-choice .flex-control-nav {
+	left: 0;
+	right: auto;
+	text-align: left;
+}
+
+/*news blocks*/
+.view-world-news .more-link {
+	right: 0;
+	left: 10px;
+	text-align: left;
+}
+
+.view-world-news .views-row-1 {
+	float: right;
+	margin: 0 0 0 20px;
+}
+
+/*tabs-2*/
+.view-popular-posts .views-row {
+	padding: 0 0 12px 50px;
+}
+.view-popular-posts .views-field-field-image,
+.view-taxonomy-term-page .views-field-field-image {
+	float: right;
+	margin: 0 0 0 15px;
+}
+
+/*in pictures*/
+#block-views-in-pictures-block .more-link,
+.view-in-pictures .flex-control-nav {
+	text-align: left;
+}
+
+
+#block-block-4 .content li a,
+a.follow-link {
+	background-position: right;
+	padding-right: 20px;
+}
+
+#block-block-4 ul {
+	padding-right: 0;
+}
+
+/*tags block*/
+.view-tags li.views-row {
+	float: right;
+}
+
+.view-taxonomy-term-page .attachment-before .views-field-field-image {
+	float: right;
+	margin: 0 0 0 20px;
+}
+
+.field-type-image {
+	float: right;
+	margin: 0 0 15px 21px;
+}
+
+.view-similarterms .views-field-field-image {
+	float: right;
+	margin: 0 10px 0 16px;
+}
+
+#display {
+	float: left;
+	padding: 0;
+}
+
+.view-gallery .view-header .views-field-field-images-1 {
+	margin: 0 0 0 20px !important;
+}
+[rel="row"] .view-gallery .views-field-field-images-1 {
+	float: right;
+	margin: 0 0 0 16px;
+}
+
+.node-teaser .field-type-image, .node-employee .field-type-image {
+	float: right;
+	margin: 0 0 0 20px;
+}
+
+.view-archives .views-field-title {
+	float: right;
+}
+
+.view-archives .views-field-comment-count {
+	float: left;
+}
+
+#site-map .site-map-box li {
+	background-position: right;
+	padding: 0 12px 0 0;
+}
+#site-map .site-map-box li.expanded {
+	background: none;
+}
