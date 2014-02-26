@@ -21,10 +21,9 @@ stylesheets[screen][] = css/responsive.css
 
 stylesheets[screen][] = css/style_dark_blue.css
 stylesheets[screen][] = css/maintenance-page.css
+stylesheets[screen][] = css/overrides.css
 
 styleswitcher[css][Dark Blue] = css/style_dark_blue.css
-styleswitcher[css][Black] = css/overrides.css
-
 
 scripts[] = js/global_news.core.js
 scripts[] = js/jquery.loader.js
