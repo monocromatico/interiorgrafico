@@ -80,6 +80,7 @@
 
   <?php if ($display_submitted): ?>
     <header>
+    <h2><?php echo $node->title; ?></h2> 
      <time class="full-format" datetime="<?php print $submitted_pubdate; ?>">
         <?php echo date('M d, Y', $node->created); ?>
      </time>
