@@ -2,3 +2,8 @@
 float: none;
 width: 100%;
 }
+
+.view-world-news .views-row-1 .views-field-field-blog-image {
+display: block;
+margin-bottom: 10px;
+}
