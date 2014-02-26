@@ -3,7 +3,11 @@ float: none;
 width: 100%;
 }
 
-.view-world-news .views-row-1 .views-field-field-blog-image {
-display: block;
+.view-world-news .views-row .views-field-field-blog-image {
+display:none;
 margin-bottom: 10px;
+}
+
+.view-world-news .views-row-first .views-field-field-blog-image{
+	display:block;
 }
