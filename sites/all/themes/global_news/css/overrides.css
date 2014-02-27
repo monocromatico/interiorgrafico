@@ -12,3 +12,9 @@ margin-bottom: 10px;
 .view-world-news .views-row-first .views-field-field-blog-image{
 	display:block;
 }
+
+#block-block-9{
+	display:inline-block;
+	float:right;
+	margin-top:18px;
+}
