@@ -13,9 +13,6 @@ engine = phptemplate
 ; We use [screen] instead of [all] to avoid browser styles affecting 
 ; other media types. IE stylesheets are loaded through template.php
 
-features[] = main_menu
-features[] = secondary_menu
-
 stylesheets[screen][] = css/boilerplate.css
 stylesheets[screen][] = css/style.css
 stylesheets[screen][] = css/common.css
