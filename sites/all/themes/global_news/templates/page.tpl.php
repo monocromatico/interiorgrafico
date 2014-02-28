@@ -181,8 +181,7 @@
 
     <footer id="footer" role="contentinfo">
       <?php // print render($page['footer']); ?>
-      <?php print theme('links__system_secondary_menu', array('links' => $secondary_menu, 'attributes' => array('id' => 'secondary-menu', 'class' => array('links', 'inline', 'clearfix')))); ?>
-      <?php print $secondary_menu; ?>
+      <?php print 'aqui van:'. theme('links__system_secondary_menu', array('links' => $secondary_menu, 'attributes' => array('id' => 'secondary-menu', 'class' => array('links', 'inline', 'clearfix')))); ?>
     </footer><!-- /#footer -->
 
   </div><!-- /#page -->
