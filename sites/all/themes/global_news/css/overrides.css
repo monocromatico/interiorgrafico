@@ -18,3 +18,15 @@ margin-bottom: 10px;
 	float:right;
 	margin-top:18px;
 }
+
+/*Ediciones Views*/
+
+.view-ediciones .views-row .taxonomy-term h2 a {
+	font-size:11pt;
+	font-weight:normal;
+	text-decoration:none;
+}
+
+.view-ediciones .views-row .taxonomy-term h2 a:hover {
+	text-decoration:underline;
+}
