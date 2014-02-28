@@ -181,7 +181,7 @@
 
     <footer id="footer" role="contentinfo">
       <?php // print render($page['footer']); ?>
-      <?php print render($secondary_menu); ?>
+      <?php print $secondary_menu; ?>
     </footer><!-- /#footer -->
 
   </div><!-- /#page -->
