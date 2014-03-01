@@ -24,6 +24,9 @@ margin-bottom: 10px;
 	border-bottom:1px dashed #ccc;
 	padding:10px 0;
 }
+.view-ediciones .views-row .taxonomy-term h2 {
+	margin:0;
+}
 .view-ediciones .views-row .taxonomy-term h2 a {
 	font-size:11pt;
 	font-weight:normal;
