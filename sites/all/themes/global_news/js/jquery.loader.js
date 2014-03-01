@@ -1,5 +1,10 @@
 jQuery(document).ready(function(){
 
+  $('.view-ediciones .views-row').each(function(){
+    $(this).find('.taxonomy-term h2 a').attr('href').replace('/edicion/','/ediciones/');
+    console.log('bleep');
+  });
+
   jQuery("#tools h3").click(function(e){
 
     e.preventDefault();
