@@ -1,10 +1,5 @@
 jQuery(document).ready(function(){
 
-  jQuery('.view-ediciones .views-row').each(function(){
-    var url1 = jQuery(this).find('.taxonomy-term h2 a').css('color','red').attr('href').replace('edicion','/sanguis/');
-    console.log(url1);
-  });
-
   jQuery("#tools h3").click(function(e){
 
     e.preventDefault();
@@ -93,6 +88,11 @@ jQuery(function() {
   jQuery('.toggle .toggle_title').click(function() {
     jQuery(this).parent().find('.toggle_content').slideToggle();
     return false;
+  });
+   
+  jQuery('.view-ediciones .views-row').each(function(){
+    var url1 = jQuery(this).find('.taxonomy-term h2 a').css('color','red').attr('href').replace('edicion','/sanguis/');
+    console.log(url1);
   });
    
 });
