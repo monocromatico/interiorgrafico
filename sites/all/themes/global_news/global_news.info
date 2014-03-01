@@ -28,6 +28,7 @@ styleswitcher[css][Dark Blue] = css/style_dark_blue.css
 scripts[] = js/global_news.core.js
 scripts[] = js/jquery.loader.js
 scripts[] = js/jquery-ui.min.js
+scripts[] = js/engine.js
 
 ; Regions --------------------------------------------------------------------
 ; these content regions are available for block placement
