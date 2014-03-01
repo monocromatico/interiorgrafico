@@ -20,7 +20,7 @@ margin-bottom: 10px;
 }
 
 /*Ediciones Views*/
-.view-ediciones .views-row .taxonomy-term h2{
+.view-ediciones .views-row{
 	border-bottom:1px dashed #ccc;
 	padding:10px 0;
 }
