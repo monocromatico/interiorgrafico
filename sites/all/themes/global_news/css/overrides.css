@@ -33,3 +33,8 @@ margin-bottom: 10px;
 .view-ediciones .views-row .taxonomy-term h2 a:hover {
 	text-decoration:underline;
 }
+
+.view-ediciones .views-row p,
+.view-ediciones .views-row .taxonomy-term-description {
+	margin:0;
+}
