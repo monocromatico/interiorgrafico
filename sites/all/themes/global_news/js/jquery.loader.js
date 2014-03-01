@@ -1,7 +1,7 @@
 jQuery(document).ready(function(){
 
   jQuery('.view-ediciones .views-row').each(function(){
-    jQuery(this).find('.taxonomy-term h2 a').attr('href').replace('/edicion/','/ediciones/');
+    jQuery(this).find('.taxonomy-term h2 a').attr('href').replace('/edicion/','/sanguis/');
     console.log('bleep');
   });
 
