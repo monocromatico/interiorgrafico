@@ -50,6 +50,7 @@ function global_news_preprocess(&$vars, $hook) {
  * Implements template_preprocess_html().
  */
 function global_news_preprocess_html(&$vars) {
+  $theme_path = ('theme','global_news');
   drupal_add_js($theme_path.'/js/engine.js', array('type' => 'file', 'scope' => 'footer')); 
   $vars['doctype'] = _global_news_doctype();
   $vars['rdf'] = _global_news_rdf($vars);
