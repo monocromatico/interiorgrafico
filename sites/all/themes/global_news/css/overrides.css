@@ -41,3 +41,10 @@ margin-bottom: 10px;
 .view-ediciones .views-row .taxonomy-term-description {
 	margin:0;
 }
+
+/*Footer*/
+#footer .content p {
+	color:#222;
+	text-align: justify;
+	font-size:11px;
+}
