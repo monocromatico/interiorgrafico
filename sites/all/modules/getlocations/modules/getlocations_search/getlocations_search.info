@@ -5,9 +5,9 @@ package = "Location"
 php = 5
 dependencies[] = getlocations
 
-; Information added by drupal.org packaging script on 2013-07-06
-version = "7.x-1.8"
+; Information added by Drupal.org packaging script on 2014-02-28
+version = "7.x-1.12"
 core = "7.x"
 project = "getlocations"
-datestamp = "1373123453"
+datestamp = "1393615113"
 

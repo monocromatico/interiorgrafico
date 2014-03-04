@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file
+ * @file getlocations.admin.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -16,15 +16,31 @@
  */
 function getlocations_settings_form() {
   $getlocations_defaults = getlocations_defaults();
-  drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_admin.js');
+  $getlocations_paths = getlocations_paths_get();
+  drupal_add_js($getlocations_paths['getlocations_admin_path']);
 
   $form = array();
+
+  $pagetitle = '<div><h4>' . t('Getlocations base settings') . '</h4><p>' . t('The settings selected here will be used as the starting point for all other Google maps.') . '</p></div>';
+  $form['pagetitle'] = array('#markup' => $pagetitle);
 
   $form['rebuild'] = array(
     '#type' => 'fieldset',
     '#title' => t('Regenerate Getlocations marker cache'),
     '#description' => t('If you are having problems with markers, or have changed anything in the markers library, click on the Regenerate button.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
   );
+
+  $c = count(getlocations_get_marker_titles());
+  if ($c) {
+    $rebuildmsg = '<p>' . format_plural($c, 'You have 1 marker installed.', 'You have @count markers installed.') . '</p>';
+  }
+  else {
+    $rebuildmsg = '<p class="error">' . t('WARNING! NO markers found.') . '</p>';
+  }
+  $form['rebuild']['msg'] = array('#markup' => $rebuildmsg);
+
   if (file_default_scheme() != 'public') {
     $form['rebuild']['getlocations_private_markerfile'] = getlocations_element_map_tf(
       t('Path to getlocations_markers.js'),
@@ -44,6 +60,11 @@ function getlocations_settings_form() {
     '#type' => 'submit',
     '#value' => t('Regenerate'),
     '#submit' => array('_getlocations_rebuild_marker_js_submit'),
+  );
+  $form['rebuild']['getlocations_flush'] = getlocations_element_map_checkbox(
+    t('Flush marker cache'),
+    variable_get('getlocations_flush', 1),
+    t('Include the marker cache when the Drupal cache is flushed.')
   );
 
   // google api3 key
@@ -70,7 +91,7 @@ function getlocations_settings_form() {
   $form['getlocations_preview'] = array(
     '#type' => 'fieldset',
     '#title' => t('Getlocations Preview'),
-    '#description' => t('A preview of the current map settings.<br />You can adjust the default map center, zoom and type by changing the map.<br />For all other changes Save Configuration.'),
+    '#description' => t('A preview of the current map settings.') . '<br />' . t('You can adjust the default Map center, Zoom and Default map type by changing the map.') . '<br />' . t('For all other changes use the form. Remember to Save configuration when you are done.'),
     // This will store all the defaults in one variable.
     '#tree' => FALSE,
   );
@@ -81,6 +102,8 @@ function getlocations_settings_form() {
     '#title' => t('Getlocations Default map settings'),
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
   );
 
   $form['getlocations_default'] += getlocations_map_display_basics_form($getlocations_defaults);
@@ -156,6 +179,14 @@ function getlocations_settings_form() {
 
   $form['getlocations_default']['markeractiontype'] = getlocations_element_map_markeractiontype($getlocations_defaults['markeractiontype']);
   $form['getlocations_default']['markeraction'] = getlocations_element_map_markeraction($getlocations_defaults['markeraction']);
+
+  if (module_exists('getdirections')) {
+    $form['getlocations_default']['getdirections_link'] = getlocations_element_map_checkbox(
+      t('Link to Getdirections in bubble'),
+      $getlocations_defaults['getdirections_link'],
+      t('Include a link to the Getdirections page in InfoBubble/InfoWindow.')
+    );
+  }
 
   $form['getlocations_default']['preload_data'] = getlocations_element_map_checkbox(
     t('Preload marker data'),
@@ -291,6 +322,8 @@ function getlocations_settings_form() {
       '#title' => t('Content type markers'),
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
     );
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     $form['getlocations_node_marker']['enable'] = getlocations_element_map_checkbox(
@@ -326,6 +359,8 @@ function getlocations_settings_form() {
         // This will store all the defaults in one variable.
         '#tree' => TRUE,
         '#description' => t('Vocabularies with a %module field.', array('%module' => $module)),
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
       );
       $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
       $form['getlocations_vocabulary_marker']['enable'] = getlocations_element_map_checkbox(
@@ -354,6 +389,8 @@ function getlocations_settings_form() {
       '#title' => t('Term markers'),
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
     );
     $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
     $form['getlocations_term_marker']['enable'] = getlocations_element_map_checkbox(
@@ -412,6 +449,8 @@ function getlocations_settings_form() {
       '#title' => t('Colorbox settings'),
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
     );
     $form['getlocations_colorbox']['enable'] = getlocations_element_map_checkbox(
       t('Enable Colorbox'),
@@ -485,6 +524,20 @@ function getlocations_settings_form() {
     TRUE
   );
 
+  $getlocations_aggr = getlocations_aggr_get();
+  $form['getlocations_agg'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Javescript Aggregation'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    // This will store all the defaults in one variable.
+    '#tree' => FALSE,
+  );
+  $form['getlocations_agg']['getlocations_aggr'] = getlocations_element_map_checkbox(
+    t('Allow Getlocations Javascript to be aggregated'),
+    $getlocations_aggr
+  );
+
   $form['getlocations_paths'] = array(
     '#type' => 'fieldset',
     '#title' => t('Javascript paths'),
@@ -495,7 +548,6 @@ function getlocations_settings_form() {
     '#tree' => TRUE,
   );
 
-  $getlocations_paths = getlocations_paths_get();
   $form['getlocations_paths']['infobubble_path'] = getlocations_element_path(
     t('Path to InfoBubble javascript file'),
     $getlocations_paths['infobubble_path'],
@@ -503,6 +555,14 @@ function getlocations_settings_form() {
     128,
     t('Where the InfoBubble javascript file is located.')
   );
+  $form['getlocations_paths']['infobubble_extended_path'] = getlocations_element_path(
+    t('Path to InfoBubble extended javascript file'),
+    $getlocations_paths['infobubble_extended_path'],
+    60,
+    128,
+    t('Where the InfoBubble extended javascript file is located.')
+  );
+
   $form['getlocations_paths']['infowindow_options_path'] = getlocations_element_path(
     t('Path to InfoWindow options javascript file'),
     $getlocations_paths['infowindow_options_path'],
@@ -593,6 +653,62 @@ function getlocations_settings_form() {
     128,
     t('Where the getlocations preview javascript file is located.')
   );
+  // geojson
+  $form['getlocations_paths']['getlocations_geojson_path'] = getlocations_element_path(
+    t('Path to getlocations Geojson javascript file'),
+    $getlocations_paths['getlocations_geojson_path'],
+    60,
+    128,
+    t('Where the getlocations geojson javascript file is located.')
+  );
+  // admin
+  $form['getlocations_paths']['getlocations_admin_path'] = getlocations_element_path(
+    t('Path to getlocations Admin javascript file'),
+    $getlocations_paths['getlocations_admin_path'],
+    60,
+    128,
+    t('Where the getlocations admin javascript file is located.')
+  );
+  // box
+  $form['getlocations_paths']['getlocations_box_path'] = getlocations_element_path(
+    t('Path to getlocations Box javascript file'),
+    $getlocations_paths['getlocations_box_path'],
+    60,
+    128,
+    t('Where the getlocations box javascript file is located.')
+  );
+  // colorbox
+  $form['getlocations_paths']['getlocations_colorbox_path'] = getlocations_element_path(
+    t('Path to getlocations Colorbox javascript file'),
+    $getlocations_paths['getlocations_colorbox_path'],
+    60,
+    128,
+    t('Where the getlocations colorbox javascript file is located.')
+  );
+  // marker_box
+  $form['getlocations_paths']['getlocations_marker_box_path'] = getlocations_element_path(
+    t('Path to getlocations Markerbox javascript file'),
+    $getlocations_paths['getlocations_marker_box_path'],
+    60,
+    128,
+    t('Where the getlocations markerbox javascript file is located.')
+  );
+  // views
+  $form['getlocations_paths']['getlocations_views_path'] = getlocations_element_path(
+    t('Path to getlocations Views javascript file'),
+    $getlocations_paths['getlocations_views_path'],
+    60,
+    128,
+    t('Where the getlocations views javascript file is located.')
+  );
+  // icons
+  $form['getlocations_paths']['getlocations_icons_path'] = getlocations_element_path(
+    t('Path to getlocations Icons javascript file'),
+    $getlocations_paths['getlocations_icons_path'],
+    60,
+    128,
+    t('Where the getlocations icons javascript file is located.')
+  );
 
   $form['getlocations_paths']['getlocations_path'] = getlocations_element_path(
     t('Path to getlocations javascript file'),
@@ -601,9 +717,11 @@ function getlocations_settings_form() {
     128,
     t('Where the getlocations javascript file is located.')
   );
-  $form['getlocations_paths']['reset'] = getlocations_element_map_checkbox(
+
+  $form['getlocations_paths']['reset'] = getlocations_element_dd(
     t('Reset'),
     0,
+    array(0 => t('No'), 1 => t('Reset'), 2 => t('Reset to minified')),
     t('Reset the paths to the defaults.')
   );
 
@@ -715,10 +833,31 @@ function getlocations_settings_validate($form, &$form_state) {
     $form_state['values']['getlocations_default']['places'] = 1;
   }
 
+  // css check
+  if (isset($form_state['values']['getlocations_default']['width'])) {
+    if ($check = getlocations_dim_check($form_state['values']['getlocations_default']['width'])) {
+      $form_state['values']['getlocations_default']['width'] = $check;
+    }
+    else {
+      form_set_error('getlocations_default][width', t('Width must be valid css'));
+    }
+  }
+  if (isset($form_state['values']['getlocations_default']['height'])) {
+    if ($check = getlocations_dim_check($form_state['values']['getlocations_default']['height'])) {
+      $form_state['values']['getlocations_default']['height'] = $check;
+    }
+    else {
+      form_set_error('getlocations_default][height', t('Height must be valid css'));
+    }
+  }
+
   $reset = $form_state['values']['getlocations_paths']['reset'];
   unset($form_state['values']['getlocations_paths']['reset']);
-  if ($reset) {
+  if ($reset == 1) {
     $form_state['values']['getlocations_paths'] = getlocations_paths_get(TRUE);
+  }
+  elseif ($reset == 2) {
+    $form_state['values']['getlocations_paths'] = getlocations_paths_get(FALSE, TRUE);
   }
 
 }
@@ -727,6 +866,7 @@ function getlocations_settings_validate($form, &$form_state) {
  * Rebuild marker js.
  */
 function _getlocations_rebuild_marker_js_submit($form, &$form_state) {
-  getlocations_regenerate_markers();
-  drupal_set_message(t('Marker cache regenerated.'));
+  if (getlocations_regenerate_markers()) {
+    drupal_set_message(t('Marker cache regenerated.'));
+  }
 }

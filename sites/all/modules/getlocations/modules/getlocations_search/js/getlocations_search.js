@@ -1,6 +1,6 @@
 
 /**
- * @file
+ * @file getlocations_search.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -31,10 +31,13 @@
         gset.search_marker_toggle = searchsettings.search_marker_toggle;
         gset.search_info_path = searchsettings.search_info_path;
         gset.zoom_on_single_use = searchsettings.zoom_on_single_use;
+        gset.display_accuracy = searchsettings.display_accuracy;
         var autocomplete_bias = searchsettings.autocomplete_bias;
         var restrict_by_country = searchsettings.restrict_by_country;
         var country = searchsettings.country;
         var maxzoom = searchsettings.maxzoom;
+        gset.showall = searchsettings.showall;
+        gset.display_geo_microformat = searchsettings.display_geo_microformat;
 
         var mapid = key;
         var mapid2 = key.replace("_", "-");
@@ -127,7 +130,11 @@
         }
 
         // geolocation by browser
-        if (gset.is_mobile && navigator && navigator.geolocation) {
+        if (navigator && navigator.geolocation) {
+          $("#getlocations_search_geolocation_status_ok_" + key).hide();
+          $("#getlocations_search_geolocation_status_err_" + key).hide();
+          $("#getlocations_search_geolocation_status_ok_" + key).removeClass('js-hide');
+          $("#getlocations_search_geolocation_status_err_" + key).removeClass('js-hide');
           $("#getlocations_search_geolocation_button_" + key).click( function () {
             do_Geolocationbutton(getlocations_map[key], gset, key);
           });
@@ -201,15 +208,17 @@
 
   // cleans out any existing markers, sets up a new geocoder and runs it, filling in the results.
   function do_Geocode(map, gs, adrs, mkey) {
-    // are there any markers already?
-    if (search_markersArray.length) {
-      getlocations_search_deleteOverlays();
-      // clear out manager
-      if (gs.usemarkermanager) {
-        gs.mgr.clearMarkers();
-      }
-      else if (gs.useclustermanager) {
-        gs.cmgr.clearMarkers();
+    if (! gs.showall) {
+      // are there any markers already?
+      if (search_markersArray.length) {
+        getlocations_search_deleteOverlays();
+        // clear out manager
+        if (gs.usemarkermanager) {
+          gs.mgr.clearMarkers();
+        }
+        else if (gs.useclustermanager) {
+          gs.cmgr.clearMarkers();
+        }
       }
     }
     // clear out search marker
@@ -233,6 +242,7 @@
     $("#getlocations_search_type_" + mkey).html('');
     $("#getlocations_search_lat_" + mkey).html('');
     $("#getlocations_search_lon_" + mkey).html('');
+    $("#getlocations_search_latlon_" + mkey).html('');
     if (gs.show_maplinks) {
       $("div#getlocations_map_links_" + mkey + " ul").html("");
     }
@@ -260,6 +270,23 @@
         var address = results[0].formatted_address;
         var slat = results[0].geometry.location.lat();
         var slon = results[0].geometry.location.lng();
+
+        var accuracy = '';
+        if (gs.display_accuracy) {
+          if (results[0].geometry.location_type == 'APPROXIMATE') {
+            accuracy =  Drupal.t('Approximate');
+          }
+          else if (results[0].geometry.location_type == 'GEOMETRIC_CENTER') {
+            accuracy = Drupal.t('Center');
+          }
+          else if (results[0].geometry.location_type == 'RANGE_INTERPOLATED') {
+            accuracy = Drupal.t('Interpolated');
+          }
+          else if (results[0].geometry.location_type == 'ROOFTOP') {
+            accuracy = Drupal.t('Exact');
+          }
+        }
+
         // go get the data
         $.get(gs.search_info_path, {
           'lat':slat,
@@ -315,17 +342,20 @@
             if (locations[i].glid > 0) {
               lid = locations[i].glid;
             }
-            // just in case
-            if (locations[i].marker === '') {
-              gs.markdone = gs.defaultIcon;
+
+            if (! gs.showall) {
+              // just in case
+              if (locations[i].marker === '') {
+                gs.markdone = gs.defaultIcon;
+              }
+              else {
+                gs.markdone = Drupal.getlocations.getIcon(locations[i].marker);
+              }
+              title = (locations[i].title ? locations[i].title : (locations[i].name ? locations[i].name : ''));
+              // make a marker
+              marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, lid, title, lidkey, '', '', mkey);
+              search_markersArray.push(marker);
             }
-            else {
-              gs.markdone = Drupal.getlocations.getIcon(locations[i].marker);
-            }
-            title = (locations[i].title ? locations[i].title : (locations[i].name ? locations[i].name : ''));
-            // make a marker
-            marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, lid, title, lidkey, '', '', mkey);
-            search_markersArray.push(marker);
             locationct++;
           }
           // display results
@@ -335,19 +365,29 @@
             $("#getlocations_search_count_" + mkey).html('<span class="results-label">' + Drupal.t('Locations found') + ':</span><span class="results-value">' + locationct + '</span>');
             $("#getlocations_search_type_" + mkey).html('<span class="results-label">' + Drupal.t('Search Type') + ':</span><span class="results-value">' + typesdisplay[type] + '</span>');
           }
-          $("#getlocations_search_lat_" + mkey).html('<span class="results-label">' + Drupal.t('Latitude') + ':</span><span class="results-value">' + latout + '</span>');
-          $("#getlocations_search_lon_" + mkey).html('<span class="results-label">' + Drupal.t('Longitude') + ':</span><span class="results-value">' + lonout + '</span>');
+          if (accuracy) {
+            $("#getlocations_search_accuracy_" + mkey).html('<span class="results-label">' + Drupal.t('Accuracy') + ':</span><span class="results-value">' + accuracy + '</span>');
+          }
+          if (gs.display_geo_microformat) {
+            $("#getlocations_search_latlon_" + mkey).html('<div class="geo"><abbr class="latitude" title="' + slat + '">' + latout + '</abbr>&nbsp;<abbr class="longitude" title="' + slon + '">' + lonout + '</abbr></div>');
+          }
+          else {
+            $("#getlocations_search_lat_" + mkey).html('<span class="results-label">' + Drupal.t('Latitude') + ':</span><span class="results-value">' + latout + '</span>');
+            $("#getlocations_search_lon_" + mkey).html('<span class="results-label">' + Drupal.t('Longitude') + ':</span><span class="results-value">' + lonout + '</span>');
+          }
           // hidden stuff, used by search distance and search marker
           $("#getlocations_search_slat_" + mkey).html(slat);
           $("#getlocations_search_slon_" + mkey).html(slon);
           $("#getlocations_search_sunit_" + mkey).html(units);
 
-          // markermanagers add batchr
-          if (gs.usemarkermanager) {
-            gs.mgr.addMarkers(search_markersArray, gs.minzoom, gs.maxzoom);
-          }
-          else if (gs.useclustermanager) {
-            gs.cmgr.addMarkers(search_markersArray, 0);
+          if (! gs.showall) {
+            // markermanagers add batchr
+            if (gs.usemarkermanager) {
+              gs.mgr.addMarkers(search_markersArray, gs.minzoom, gs.maxzoom);
+            }
+            else if (gs.useclustermanager) {
+              gs.cmgr.addMarkers(search_markersArray, 0);
+            }
           }
           if (minlat !== '' && minlon !== '' && maxlat !== '' && maxlon !== '') {
             if (gs.pansetting == 1) {
@@ -363,11 +403,14 @@
               }
             }
           }
-          if (gs.usemarkermanager) {
-            gs.mgr.refresh();
-          }
-          else if (gs.useclustermanager) {
-             gs.cmgr.repaint();
+
+          if (! gs.showall) {
+            if (gs.usemarkermanager) {
+              gs.mgr.refresh();
+            }
+            else if (gs.useclustermanager) {
+              gs.cmgr.repaint();
+            }
           }
           // search marker
           if (gs.do_search_marker) {
@@ -378,9 +421,12 @@
             if (gs.zoom_on_single_use) {
               map.setZoom(gs.nodezoom);
             }
-            // show_bubble_on_one_marker
-            if (gs.show_bubble_on_one_marker && (gs.useInfoWindow || gs.useInfoBubble)) {
-              google.maps.event.trigger(marker, 'click');
+
+            if (! gs.showall) {
+              // show_bubble_on_one_marker
+              if (gs.show_bubble_on_one_marker && (gs.useInfoWindow || gs.useInfoBubble)) {
+                google.maps.event.trigger(marker, 'click');
+              }
             }
           }
 
@@ -400,9 +446,6 @@
   }
 
   function do_Geolocationbutton(map, gs, mkey) {
-    var statusdiv = '#getlocations_search_geolocation_status_' + mkey;
-    var statusmsg = '';
-    $(statusdiv).html(statusmsg);
     navigator.geolocation.getCurrentPosition(
       function(position) {
         lat = position.coords.latitude;
@@ -410,12 +453,12 @@
         var p = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
         var fm_adrs = {'latLng': p};
         do_Geocode(map, gs, fm_adrs, mkey);
-        //statusmsg = Drupal.t('Browser OK');
-        //$(statusdiv).html(statusmsg);
+        $("#getlocations_search_geolocation_status_ok_" + mkey).show();
+        $("#getlocations_search_geolocation_status_err_" + mkey).hide();
       },
       function(error) {
-        statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getlocations.geolocationErrorMessages(error.code) + ".";
-        $(statusdiv).html(statusmsg);
+        $("#getlocations_search_geolocation_status_ok_" + mkey).hide();
+        $("#getlocations_search_geolocation_status_err_" + mkey).show();
       }, {maximumAge:10000}
     );
   }
@@ -429,7 +472,8 @@
       shape: smarkdone.shape,
       map: map,
       position: p,
-      title: Drupal.t('Search center'),
+      //title: Drupal.t('Search center'),
+      clickable: false,
       optimized: false
     });
     if (markertoggleState[k]) {

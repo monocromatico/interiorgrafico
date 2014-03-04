@@ -14,6 +14,22 @@
  * @ingroup views_style_plugins
  */
 class getlocations_plugin_style_map extends views_plugin_style {
+
+  /**
+   * If this view is displaying an entity, save the entity type and info.
+   */
+  function init(&$view, &$display, $options = NULL) {
+    parent::init($view, $display, $options);
+
+    foreach (entity_get_info() as $key => $info) {
+      if ($view->base_table == $info['base table']) {
+        $this->entity_type = $key;
+        $this->entity_info = $info;
+        break;
+      }
+    }
+  }
+
   /**
    * Set default options
    */
@@ -23,7 +39,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
   }
 
   function option_definition() {
-    drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_views.js');
+
     $options = parent::option_definition();
 
     $getlocations_defaults = getlocations_defaults();
@@ -44,9 +60,16 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['mtc']                   = array('default' => $getlocations_defaults['mtc']);
     $options['maptype']               = array('default' => $getlocations_defaults['maptype']);
     $options['baselayers']            = array('default' => $getlocations_defaults['baselayers']);
-    $options['behavior']              = array('default' => $getlocations_defaults['behavior']);
+    $options['scale']                 = array('default' => $getlocations_defaults['scale']) ;
+    $options['overview']              = array('default' => $getlocations_defaults['overview']);
+    $options['overview_opened']       = array('default' => $getlocations_defaults['overview_opened']);
+    $options['scrollwheel']           = array('default' => $getlocations_defaults['scrollwheel']);
     $options['show_maplinks']         = array('default' => $getlocations_defaults['show_maplinks']);
-    $options['streetview_show']       = array('default' => $getlocations_defaults['streetview_show']);
+    $options['sv_show']               = array('default' => $getlocations_defaults['sv_show']);
+    $options['sv_showfirst']          = array('default' => $getlocations_defaults['sv_showfirst']);
+    $options['sv_heading']            = array('default' => $getlocations_defaults['sv_heading']);
+    $options['sv_zoom']               = array('default' => $getlocations_defaults['sv_zoom']);
+    $options['sv_pitch']              = array('default' => $getlocations_defaults['sv_pitch']);
     $options['fullscreen']            = array('default' => $getlocations_defaults['fullscreen']);
     $options['show_bubble_on_one_marker'] = array('default' => $getlocations_defaults['show_bubble_on_one_marker']);
     $options['trafficinfo']           = array('default' => $getlocations_defaults['trafficinfo']);
@@ -106,6 +129,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['rectangles_coords']        = array('default' => $getlocations_defaults['rectangles_coords']);
     $options['rectangles_clickable']     = array('default' => $getlocations_defaults['rectangles_clickable']);
     $options['rectangles_message']       = array('default' => $getlocations_defaults['rectangles_message']);
+    $options['rectangles_apply']         = array('default' => $getlocations_defaults['rectangles_apply']);
+    $options['rectangles_dist']          = array('default' => $getlocations_defaults['rectangles_dist']);
     $options['circles_enable']           = array('default' => $getlocations_defaults['circles_enable']);
     $options['circles_strokecolor']      = array('default' => $getlocations_defaults['circles_strokecolor']);
     $options['circles_strokeopacity']    = array('default' => $getlocations_defaults['circles_strokeopacity']);
@@ -116,6 +141,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['circles_clickable']        = array('default' => $getlocations_defaults['circles_clickable']);
     $options['circles_message']          = array('default' => $getlocations_defaults['circles_message']);
     $options['circles_radius']           = array('default' => $getlocations_defaults['circles_radius']);
+    $options['circles_apply']            = array('default' => $getlocations_defaults['circles_apply']);
     $options['polylines_enable']         = array('default' => $getlocations_defaults['polylines_enable']);
     $options['polylines_strokecolor']    = array('default' => $getlocations_defaults['polylines_strokecolor']);
     $options['polylines_strokeopacity']  = array('default' => $getlocations_defaults['polylines_strokeopacity']);
@@ -123,14 +149,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['polylines_coords']         = array('default' => $getlocations_defaults['polylines_coords']);
     $options['polylines_clickable']      = array('default' => $getlocations_defaults['polylines_clickable']);
     $options['polylines_message']        = array('default' => $getlocations_defaults['polylines_message']);
-    $options['kml_url']                  = array('default' => $getlocations_defaults['kml_url']);
-    $options['kml_url_click']            = array('default' => $getlocations_defaults['kml_url_click']);
-    $options['kml_url_infowindow']       = array('default' => $getlocations_defaults['kml_url_infowindow']);
-    $options['kml_url_viewport']         = array('default' => $getlocations_defaults['kml_url_viewport']);
-    $options['kml_url_button']           = array('default' => $getlocations_defaults['kml_url_button']);
-    $options['kml_url_button_label']     = array('default' => $getlocations_defaults['kml_url_button_label']);
-    $options['kml_url_button_state']     = array('default' => $getlocations_defaults['kml_url_button_state']);
-    $options['visual_refresh']           = array('default' => $getlocations_defaults['visual_refresh']);
+    $options['kml_url']                  = array('default' => $getlocations_defaults['kml_group']['kml_url']);
+    $options['kml_url_click']            = array('default' => $getlocations_defaults['kml_group']['kml_url_click']);
+    $options['kml_url_infowindow']       = array('default' => $getlocations_defaults['kml_group']['kml_url_infowindow']);
+    $options['kml_url_viewport']         = array('default' => $getlocations_defaults['kml_group']['kml_url_viewport']);
+    $options['kml_url_button']           = array('default' => $getlocations_defaults['kml_group']['kml_url_button']);
+    $options['kml_url_button_label']     = array('default' => $getlocations_defaults['kml_group']['kml_url_button_label']);
+    $options['kml_url_button_state']     = array('default' => $getlocations_defaults['kml_group']['kml_url_button_state']);
     $options['region_bias']              = array('default' => $getlocations_defaults['region_bias']);
     $options['fullscreen_disable']       = array('default' => $getlocations_defaults['fullscreen_disable']);
     $options['search_places']            = array('default' => $getlocations_defaults['search_places']);
@@ -149,6 +174,26 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['category_term_reference_field'] = array('default' => $getlocations_defaults['category_term_reference_field']);
     $options['category_showhide_buttons']     = array('default' => $getlocations_defaults['category_showhide_buttons']);
 
+    // geojson
+    $options['geojson_enable']  = array('default' => $getlocations_defaults['geojson_enable']);
+    $options['geojson_options'] = array('default' => $getlocations_defaults['geojson_options']);
+    $options['geojson_data']    = array('default' => $getlocations_defaults['geojson_data']);
+
+    $options['zoomcontrolposition']  = array('default' => $getlocations_defaults['zoomcontrolposition']);
+    $options['pancontrolposition']   = array('default' => $getlocations_defaults['pancontrolposition']);
+    $options['mapcontrolposition']   = array('default' => $getlocations_defaults['mapcontrolposition']);
+    $options['scalecontrolposition'] = array('default' => $getlocations_defaults['scalecontrolposition']);
+    $options['svcontrolposition']    = array('default' => $getlocations_defaults['svcontrolposition']);
+
+    $options['highlight_enable']         = array('default' => $getlocations_defaults['highlight_enable']);
+    $options['highlight_strokecolor']    = array('default' => $getlocations_defaults['highlight_strokecolor']);
+    $options['highlight_strokeopacity']  = array('default' => $getlocations_defaults['highlight_strokeopacity']);
+    $options['highlight_strokeweight']   = array('default' => $getlocations_defaults['highlight_strokeweight']);
+    $options['highlight_fillcolor']      = array('default' => $getlocations_defaults['highlight_fillcolor']);
+    $options['highlight_fillopacity']    = array('default' => $getlocations_defaults['highlight_fillopacity']);
+    $options['highlight_radius']         = array('default' => $getlocations_defaults['highlight_radius']);
+    $options['getdirections_link']       = array('default' => $getlocations_defaults['getdirections_link']);
+
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
@@ -156,7 +201,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
         foreach ($types AS $type => $name) {
           $field_names = getlocations_get_fieldname2($type, 'node');
           foreach ($field_names AS $field_name) {
-            $mkey = 'node_marker__' . $type . '__' . $field_name;
+            $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
             $mmarker = (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'] : $getlocations_defaults['node_map_marker']);
             $options[$mkey] = array('default' => $mmarker);
           }
@@ -201,6 +246,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
     parent::options_form($form, $form_state);
 
     $form['#theme'] = 'getlocations_plugin_style_map_options_form';
+    $getlocations_paths = getlocations_paths_get();
+    $form['#attached']['js'] = array($getlocations_paths['getlocations_views_path']);
 
     $handlers = $this->display->handler->get_handlers('field');
     $source_options = array('' => t('None'));
@@ -231,7 +278,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
           $field_names = getlocations_get_fieldname2($type, 'node');
           foreach ($field_names AS $field_name) {
             if (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ) {
-              $mkey = 'node_marker__' . $type . '__' . $field_name;
+              $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
               $form[$mkey] = getlocations_element_map_marker(
                 t('%name Content Map Marker, field %field', array('%name' => $name, '%field' => $field_name)),
                 $markers,
@@ -333,6 +380,14 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $this->options['markeraction']
     );
 
+    if (module_exists('getdirections')) {
+      $form['getdirections_link'] = getlocations_element_map_checkbox(
+        t('Link to Getdirections in bubble'),
+        $this->options['getdirections_link'],
+        t('Include a link to the Getdirections page in InfoBubble/InfoWindow.')
+      );
+    }
+
     // categories
     $term_reference_fields = getlocations_get_term_reference_fields();
     $opts = array(0 => t('None'), 1 => t('Content Type'));
@@ -381,17 +436,26 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
     // markermanager option
     if ($this->options['markermanagertype'] == 1) {
+      $form['useclustermanager'] = array('#type' => 'hidden', '#value' => 0);
+
       $form['usemarkermanager'] = getlocations_element_map_checkbox(
         t('Use Marker manager for this map'),
         $this->options['usemarkermanager']
       );
-      $form['useclustermanager'] = array('#type' => 'hidden', '#value' => 0);
+      $form['usemarkermanager']['#suffix'] = '<div id="wrap-usemarkermanager">';
+      $form['minzoom'] = getlocations_element_map_zoom(
+        t('Minimum Zoom'),
+        $this->options['minzoom'],
+        t('The Minimum zoom level at which markers will be visible.')
+      );
+      $form['maxzoom'] = getlocations_element_map_zoom(
+        t('Maximum Zoom'),
+        $this->options['maxzoom'],
+        t('The Maximum zoom level at which markers will be visible.')
+      );
+      $form['maxzoom']['#suffix'] = '</div>';
     }
     elseif ($this->options['markermanagertype'] == 2)  {
-      $form['useclustermanager'] = getlocations_element_map_checkbox(
-        t('Use Cluster manager for this map'),
-        $this->options['useclustermanager']
-      );
       $form['usemarkermanager'] = array('#type' => 'hidden', '#value' => 0);
       if (file_exists(GETLOCATIONS_PATH . '/getlocations.markercluster_override.inc')) {
         module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
@@ -399,26 +463,23 @@ class getlocations_plugin_style_map extends views_plugin_style {
       else {
         module_load_include('inc', 'getlocations', 'getlocations.markercluster');
       }
+
+      $form['useclustermanager'] = getlocations_element_map_checkbox(
+        t('Use Cluster manager for this map'),
+        $this->options['useclustermanager']
+      );
+      $form['useclustermanager']['#suffix'] = '<div id="wrap-useclustermanager">';
       $form['markerclusterer_style'] = getlocations_element_markerclusterer_style($this->options['markerclusterer_style']);
       $form['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($this->options['markerclusterer_zoom']);
       $form['markerclusterer_size'] = getlocations_element_markerclusterer_size($this->options['markerclusterer_size']);
       $form['markerclusterer_minsize'] = getlocations_element_markerclusterer_minsize($this->options['markerclusterer_minsize']);
+      $form['markerclusterer_minsize']['#suffix'] = '</div>';
     }
     else {
       $form['useclustermanager'] = array('#type' => 'hidden', '#value' => 0);
       $form['usemarkermanager'] = array('#type' => 'hidden', '#value' => 0);
     }
 
-    $form['minzoom'] = getlocations_element_map_zoom(
-      t('Minimum Zoom'),
-      $this->options['minzoom'],
-      t('The Minimum zoom level at which markers will be visible.')
-    );
-    $form['maxzoom'] = getlocations_element_map_zoom(
-      t('Maximum Zoom'),
-      $this->options['maxzoom'],
-      t('The Maximum zoom level at which markers will be visible.')
-    );
     $form['nodezoom'] = getlocations_element_map_zoom(
       t('Default Zoom for Single location'),
       $this->options['nodezoom'],
@@ -453,6 +514,32 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $form_state['values']['maptype'] = 'Map';
       $form_state['values']['baselayers']['Map'] = 1;
     }
+    // css check
+    if (isset($form_state['values']['style_options']['width'])) {
+      if ($check = getlocations_dim_check($form_state['values']['style_options']['width'])) {
+        $form_state['values']['style_options']['width'] = $check;
+      }
+      else {
+        form_set_error('style_options][width', t('Width must be valid css'));
+      }
+    }
+    if (isset($form_state['values']['style_options']['height'])) {
+      if ($check = getlocations_dim_check($form_state['values']['style_options']['height'])) {
+        $form_state['values']['style_options']['height'] = $check;
+      }
+      else {
+        form_set_error('style_options][height', t('Height must be valid css'));
+      }
+    }
+    if (isset($form_state['values']['style_options']['latlong'])) {
+      if ($latlon = getlocations_latlon_check($form_state['values']['style_options']['latlong'])) {
+        $form_state['values']['style_options']['latlong'] = $latlon;
+      }
+      else {
+        form_set_error('style_options][latlong', t('Map coordinates must be expressed as a decimal latitude and longitude, separated by a comma.'));
+      }
+    }
+
   }
 
   function even_empty() {

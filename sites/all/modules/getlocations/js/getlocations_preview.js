@@ -1,5 +1,6 @@
+
 /**
- * @file
+ * @file getlocations_preview.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -12,6 +13,11 @@
 
   Drupal.behaviors.getlocations_preview = {
     attach: function () {
+
+      // bail out
+      if (typeof Drupal.settings.getlocations === 'undefined') {
+        return;
+      }
 
       // first find the right map
       $.each(Drupal.settings.getlocations, function (key, settings) {

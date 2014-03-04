@@ -1,6 +1,6 @@
 
 /**
- * @file
+ * @file getlocations_polylines.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -11,15 +11,21 @@
   Drupal.behaviors.getlocations_polylines = {
     attach: function() {
 
+      // bail out
+      if (typeof Drupal.settings.getlocations_polylines === 'undefined') {
+        return;
+      }
+
       var default_polyline_settings = {
         strokeColor: '#FF0000',
         strokeOpacity: 0.8,
         strokeWeight: 3,
       };
+
       $.each(Drupal.settings.getlocations_polylines, function (key, settings) {
 
         var strokeColor = (settings.strokeColor ? settings.strokeColor : default_polyline_settings.strokeColor);
-        if (! strokeColor.match("/^#/")) {
+        if (! strokeColor.match(/^#/)) {
           strokeColor = '#' + strokeColor;
         }
         var strokeOpacity = (settings.strokeOpacity ? settings.strokeOpacity : default_polyline_settings.strokeOpacity);
@@ -33,11 +39,12 @@
         var p_strokeWeight = strokeWeight;
         var p_clickable = clickable;
         var p_message = message;
+        var pl = [];
         for (var i = 0; i < polylines.length; i++) {
           pl = polylines[i];
           if (pl.coords) {
             if (pl.strokeColor) {
-              if (! pl.strokeColor.match("/^#/")) {
+              if (! pl.strokeColor.match(/^#/)) {
                 pl.strokeColor = '#' + pl.strokeColor;
               }
               p_strokeColor = pl.strokeColor;
@@ -59,8 +66,8 @@
             var poly = [];
             scoords = pl.coords.split("|");
             for (var s = 0; s < scoords.length; s++) {
-              ll = scoords[s];
-              lla = ll.split(",");
+              var ll = scoords[s];
+              var lla = ll.split(",");
               mcoords[s] = new google.maps.LatLng(parseFloat(lla[0]), parseFloat(lla[1]));
             }
             if (mcoords.length > 1) {
@@ -75,11 +82,41 @@
               poly[i].setMap(getlocations_map[key]);
 
               if (p_clickable && p_message) {
-                infowindow = new google.maps.InfoWindow();
                 google.maps.event.addListener(poly[i], 'click', function(event) {
-                  infowindow.setContent(p_message);
-                  infowindow.setPosition(event.latLng);
-                  infowindow.open(getlocations_map[key]);
+                  // close any previous instances
+                  if (pushit) {
+                    for (var i in getlocations_settings[key].infoBubbles) {
+                      getlocations_settings[key].infoBubbles[i].close();
+                    }
+                  }
+                  if (getlocations_settings[key].markeraction == 2) {
+                    // infobubble
+                    if (typeof(infoBubbleOptions) == 'object') {
+                      var infoBubbleOpts = infoBubbleOptions;
+                    }
+                    else {
+                      var infoBubbleOpts = {};
+                    }
+                    infoBubbleOpts.content = p_message;
+                    infoBubbleOpts.position = event.latLng;
+                    var iw = new InfoBubble(infoBubbleOpts);
+                  }
+                  else {
+                    // infowindow
+                    if (typeof(infoWindowOptions) == 'object') {
+                      var infoWindowOpts = infoWindowOptions;
+                    }
+                    else {
+                      var infoWindowOpts = {};
+                    }
+                    infoWindowOpts.content = p_message;
+                    infoWindowOpts.position = event.latLng;
+                    var iw = new google.maps.InfoWindow(infoWindowOpts);
+                  }
+                  iw.open(getlocations_map[key]);
+                  if (pushit) {
+                    getlocations_settings[key].infoBubbles.push(iw);
+                  }
                 });
               }
             }

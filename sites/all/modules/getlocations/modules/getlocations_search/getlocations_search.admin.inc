@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file
+ * @file getlocations_search.admin.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -17,8 +17,10 @@ function getlocations_search_settings_form() {
 
   $getlocations_search_defaults = getlocations_search_defaults();
   $form = array();
+  $pagetitle = '<div><h4>' . t('Getlocations Search') . '</h4></div>';
+  $form['pagetitle'] = array('#markup' => $pagetitle);
 
-  $form = _getlocations_search_settings_form($getlocations_search_defaults, 'admin');
+  $form += _getlocations_search_settings_form($getlocations_search_defaults, 'admin');
 
   $form['getlocations_search_paths'] = array(
     '#type' => 'fieldset',
@@ -29,13 +31,27 @@ function getlocations_search_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  $getlocations_search_paths = variable_get('getlocations_search_paths', array('getlocations_search_path' => GETLOCATIONS_SEARCH_PATH . '/js/getlocations_search.js'));
+  $getlocations_search_paths = getlocations_search_paths_get();
   $form['getlocations_search_paths']['getlocations_search_path'] = getlocations_element_path(
     t('Path to getlocations_search javascript file'),
     $getlocations_search_paths['getlocations_search_path'],
     70,
     128,
     t('Where the getlocations_search javascript file is located.')
+  );
+  $form['getlocations_search_paths']['getlocations_search_admin_path'] = getlocations_element_path(
+    t('Path to getlocations_search admin javascript file'),
+    $getlocations_search_paths['getlocations_search_admin_path'],
+    70,
+    128,
+    t('Where the getlocations_search admin javascript file is located.')
+  );
+
+  $form['getlocations_search_paths']['reset'] = getlocations_element_dd(
+    t('Reset'),
+    0,
+    array(0 => t('No'), 1 => t('Reset'), 2 => t('Reset to minified')),
+    t('Reset the paths to the defaults.')
   );
 
   $form = system_settings_form($form);
@@ -48,7 +64,8 @@ function getlocations_search_settings_form() {
 
 // form shared between admin config and block config
 function _getlocations_search_settings_form($defaults, $which = 'admin') {
-  drupal_add_js(GETLOCATIONS_SEARCH_PATH . '/js/getlocations_search_admin.js');
+  $getlocations_search_paths = getlocations_search_paths_get();
+  drupal_add_js($getlocations_search_paths['getlocations_search_admin_path']);
 
   $getlocations_defaults = getlocations_defaults();
   $defaults['jquery_colorpicker_enabled'] = $getlocations_defaults['jquery_colorpicker_enabled'];
@@ -120,7 +137,7 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
   $form[$varname]['use_geolocation_button'] = getlocations_element_map_checkbox(
     t('Provide Browser based geocoding option'),
     $defaults['use_geolocation_button'],
-    t('Use the browser to find a location. For gps enabled mobile devices.')
+    t('Use the browser to find a location. For gps enabled mobile devices and wireless networks.')
   );
 
   // taxonomy support
@@ -318,6 +335,16 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     $defaults['display_dms'],
     ''
   );
+  $form[$varname]['display_geo_microformat'] = getlocations_element_map_checkbox(
+    t('Show Latitude/Longitude in accordance with Geo Microformat markup'),
+    $defaults['display_geo_microformat'],
+    t('See the <a href="@a" target="_blank">Microformats wiki</a> for more information', array('@a' => url('http://microformats.org/wiki/geo')))
+  );
+  $form[$varname]['display_accuracy'] = getlocations_element_map_checkbox(
+    t('Show accuracy results'),
+    $defaults['display_accuracy'],
+    ''
+  );
   $form[$varname]['show_distance'] = getlocations_element_map_checkbox(
     t('Show Distance in InfoBubble/InfoWindow'),
     $defaults['show_distance'],
@@ -347,9 +374,15 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     t('Set initial visibility on.')
   );
 
+  $form[$varname]['showall'] = getlocations_element_map_checkbox(
+    t('Show all markers'),
+    $defaults['showall'],
+    t('Show all the available locations on the map.')
+  );
+
   $form[$varname] += getlocations_map_display_basics_form($defaults);
 
-  $form[$varname] += getlocations_map_display_options_form($defaults, FALSE, TRUE);
+  $form[$varname] += getlocations_map_display_options_form($defaults, FALSE, TRUE, 'getlocations_search');
 
   $form[$varname]['markeractiontype'] = getlocations_element_map_markeractiontype(
     $defaults['markeractiontype']
@@ -358,16 +391,26 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     $defaults['markeraction']
   );
 
+  if (module_exists('getdirections')) {
+    $form[$varname]['getdirections_link'] = getlocations_element_map_checkbox(
+      t('Link to Getdirections in bubble'),
+      $defaults['getdirections_link'],
+      t('Include a link to the Getdirections page in InfoBubble/InfoWindow.')
+    );
+  }
+
   $form[$varname]['zoom_on_single_use'] = getlocations_element_map_checkbox(
     t('Apply Default Zoom for Single location'),
     $defaults['zoom_on_single_use'],
     t('Apply a Default zoom level for a single marker.')
   );
+  $form[$varname]['zoom_on_single_use']['#suffix'] = '<div id="wrap-zoom-on-single-use">';
   $form[$varname]['nodezoom'] = getlocations_element_map_zoom(
     t('Default Zoom for Single location'),
     $defaults['nodezoom'],
     t('The Default zoom level for a single marker.')
   );
+  $form[$varname]['nodezoom']['#suffix'] = '</div>';
 
   // marker manager
   $form[$varname]['markermanagertype'] = getlocations_element_markermanagertype($defaults['markermanagertype']);
@@ -429,6 +472,30 @@ function getlocations_search_settings_validate($form, &$form_state) {
       $form_state['values']['getlocations_search_defaults']['search_radshape_fillcolor'] = '#' . $form_state['values']['getlocations_search_defaults']['search_radshape_fillcolor'];
     }
 
+    if ($latlon = getlocations_latlon_check($form_state['values']['getlocations_search_defaults']['latlong'])) {
+      $form_state['values']['getlocations_search_defaults']['latlong'] = $latlon;
+    }
+    else {
+      form_set_error('getlocations_search_defaults][latlong', t('Map coordinates must be expressed as a decimal latitude and longitude, separated by a comma.'));
+    }
+    // css check
+    if (isset($form_state['values']['getlocations_search_defaults']['width'])) {
+      if ($check = getlocations_dim_check($form_state['values']['getlocations_search_defaults']['width'])) {
+        $form_state['values']['getlocations_search_defaults']['width'] = $check;
+      }
+      else {
+        form_set_error('getlocations_search_defaults][width', t('Width must be valid css'));
+      }
+    }
+    if (isset($form_state['values']['getlocations_search_defaults']['height'])) {
+      if ($check = getlocations_dim_check($form_state['values']['getlocations_search_defaults']['height'])) {
+        $form_state['values']['getlocations_search_defaults']['height'] = $check;
+      }
+      else {
+        form_set_error('getlocations_search_defaults][height', t('Height must be valid css'));
+      }
+    }
+
   }
   elseif (isset($form_state['values']['getlocations_search_block_defaults'])) {
     if (! preg_match("/^#/", $form_state['values']['getlocations_search_block_defaults']['search_radshape_strokecolor'])) {
@@ -438,7 +505,38 @@ function getlocations_search_settings_validate($form, &$form_state) {
       $form_state['values']['getlocations_search_block_defaults']['search_radshape_fillcolor'] = '#' . $form_state['values']['getlocations_search_block_defaults']['search_radshape_fillcolor'];
     }
 
+    if ($latlon = getlocations_latlon_check($form_state['values']['getlocations_search_block_defaults']['latlong'])) {
+      $form_state['values']['getlocations_search_block_defaults']['latlong'] = $latlon;
+    }
+    else {
+      form_set_error('getlocations_search_block_defaults][latlong', t('Map coordinates must be expressed as a decimal latitude and longitude, separated by a comma.'));
+    }
+    // css check
+    if (isset($form_state['values']['getlocations_search_block_defaults']['width'])) {
+      if ($check = getlocations_dim_check($form_state['values']['getlocations_search_block_defaults']['width'])) {
+        $form_state['values']['getlocations_search_block_defaults']['width'] = $check;
+      }
+      else {
+        form_set_error('getlocations_search_block_defaults][width', t('Width must be valid css'));
+      }
+    }
+    if (isset($form_state['values']['getlocations_search_block_defaults']['height'])) {
+      if ($check = getlocations_dim_check($form_state['values']['getlocations_search_block_defaults']['height'])) {
+        $form_state['values']['getlocations_search_block_defaults']['height'] = $check;
+      }
+      else {
+        form_set_error('getlocations_search_block_defaults][height', t('Height must be valid css'));
+      }
+    }
+  }
+
+  $reset = $form_state['values']['getlocations_search_paths']['reset'];
+  unset($form_state['values']['getlocations_search_paths']['reset']);
+  if ($reset == 1) {
+    $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(TRUE);
+  }
+  elseif ($reset == 2) {
+    $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(FALSE ,TRUE);
   }
 
 }
-

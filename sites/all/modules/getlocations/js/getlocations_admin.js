@@ -1,6 +1,6 @@
 
 /**
- * @file
+ * @file getlocations_admin.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -392,6 +392,159 @@
           $("#wrap-getlocations-search-places").hide();
         }
       });
+      // geojson
+      if ($("#edit-getlocations-default-geojson-enable").attr('checked')) {
+        $("#wrap-getlocations-geojson-enable").show();
+      }
+      else {
+        $("#wrap-getlocations-geojson-enable").hide();
+      }
+      $("#edit-getlocations-default-geojson-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-geojson-enable").show();
+        }
+        else {
+          $("#wrap-getlocations-geojson-enable").hide();
+        }
+      });
+
+      if ($("#edit-getlocations-default-pancontrol").is('input')) {
+        if ($("#edit-getlocations-default-pancontrol").attr('checked')) {
+          $("#wrap-getlocations-pancontrol").show();
+        }
+        else {
+          $("#wrap-getlocations-pancontrol").hide();
+        }
+        $("#edit-getlocations-default-pancontrol").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-pancontrol").show();
+          }
+          else {
+            $("#wrap-getlocations-pancontrol").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-default-controltype").is('select')) {
+        if ($("#edit-getlocations-default-controltype").val() == 'none') {
+          $("#wrap-getlocations-zoomcontrol").hide();
+        }
+        else {
+          $("#wrap-getlocations-zoomcontrol").show();
+        }
+        $("#edit-getlocations-default-controltype").change(function() {
+          if ($(this).val() == 'none') {
+            $("#wrap-getlocations-zoomcontrol").hide();
+          }
+          else {
+            $("#wrap-getlocations-zoomcontrol").show();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-default-mtc").is('select')) {
+        if ($("#edit-getlocations-default-mtc").val() == 'none') {
+          $("#wrap-getlocations-mapcontrol").hide();
+        }
+        else {
+          $("#wrap-getlocations-mapcontrol").show();
+        }
+        $("#edit-getlocations-default-mtc").change(function() {
+          if ($(this).val() == 'none') {
+            $("#wrap-getlocations-mapcontrol").hide();
+          }
+          else {
+            $("#wrap-getlocations-mapcontrol").show();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-default-scale").is('input')) {
+        if ($("#edit-getlocations-default-scale").attr('checked')) {
+          $("#wrap-getlocations-scale").show();
+        }
+        else {
+          $("#wrap-getlocations-scale").hide();
+        }
+        $("#edit-getlocations-default-scale").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-scale").show();
+          }
+          else {
+            $("#wrap-getlocations-scale").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-default-overview").is('input')) {
+        if ($("#edit-getlocations-default-overview").attr('checked')) {
+          $("#wrap-getlocations-overview").show();
+        }
+        else {
+          $("#wrap-getlocations-overview").hide();
+        }
+        $("#edit-getlocations-default-overview").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-overview").show();
+          }
+          else {
+            $("#wrap-getlocations-overview").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-default-sv-show").is('input')) {
+        if ($("#edit-getlocations-default-sv-show").attr('checked')) {
+          $("#wrap-getlocations-sv-show").show();
+        }
+        else {
+          $("#wrap-getlocations-sv-show").hide();
+        }
+        $("#edit-getlocations-default-sv-show").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-sv-show").show();
+          }
+          else {
+            $("#wrap-getlocations-sv-show").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-default-fullscreen").is('input')) {
+        if ($("#edit-getlocations-default-fullscreen").attr('checked')) {
+          $("#wrap-getlocations-fs-show").show();
+        }
+        else {
+          $("#wrap-getlocations-fs-show").hide();
+        }
+        $("#edit-getlocations-default-fullscreen").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-fs-show").show();
+          }
+          else {
+            $("#wrap-getlocations-fs-show").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-default-highlight-enable").is('input')) {
+        if ($("#edit-getlocations-default-highlight-enable").attr('checked')) {
+          $("#wrap-getlocations-highlight").show();
+        }
+        else {
+          $("#wrap-getlocations-highlight").hide();
+        }
+        $("#edit-getlocations-default-highlight-enable").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-highlight").show();
+          }
+          else {
+            $("#wrap-getlocations-highlight").hide();
+          }
+        });
+      }
+
+
 
     }
   };
