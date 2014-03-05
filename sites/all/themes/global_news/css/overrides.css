@@ -52,3 +52,8 @@ margin-bottom: 10px;
 #footer .content p .rtcenter {
 	text-align: center;
 }
+
+/*Bloque follow us*/
+#block-follow-site {
+width: 100%;
+}
