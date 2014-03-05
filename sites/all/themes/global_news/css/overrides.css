@@ -76,3 +76,8 @@ width: 100%;
 	float:none;
 
 }
+
+#block-views-in-pictures-block {
+	overflow:hidden;
+	border:2px solid;
+}
