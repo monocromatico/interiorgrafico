@@ -58,10 +58,11 @@ margin-bottom: 10px;
 width: 100%;
 }
 
-#block-follow-site .follow-links {
+#block-follow-site div.follow-links {
 	padding-left:40px;
 }
-#block-follow-site .follow-link-wrapper {
+
+#block-follow-site div.follow-links .follow-link-wrapper {
 	border:0;
 	width: 20px;
 	float:left;
