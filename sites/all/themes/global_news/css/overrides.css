@@ -57,3 +57,10 @@ margin-bottom: 10px;
 #block-follow-site {
 width: 100%;
 }
+
+#block-follow-site a.follow-link{
+	display:block;
+	text-indent:10000px;
+	overflow:hidden;
+	float:left;
+}
