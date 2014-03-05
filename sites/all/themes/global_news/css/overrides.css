@@ -55,7 +55,7 @@ margin-bottom: 10px;
 
 /*Bloque follow us*/
 #block-follow-site {
-width: 100%;
+	width: 100%;
 }
 
 #block-follow-site div.follow-links {
@@ -79,7 +79,13 @@ width: 100%;
 
 #block-views-in-pictures-block {
 	overflow:hidden;
-	border:2px solid;
+	margin-top:15px;
+}
+
+/*quicktabs*/
+#block-quicktabs-maintop {
+width: 306px;
+float: none;
 }
 
 /*Pictures*/
