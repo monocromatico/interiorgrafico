@@ -57,10 +57,15 @@ margin-bottom: 10px;
 #block-follow-site {
 width: 100%;
 }
+
+#block-follow-site .follow-links {
+	padding-left:40px;
+}
 #block-follow-site .follow-link-wrapper {
 	border:0;
 	width: 20px;
 	float:left;
+	margin:8px;
 }
 
 #block-follow-site a.follow-link{
