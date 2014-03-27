@@ -9,7 +9,7 @@ jQuery(window).load(function(){
 
 (function ($) {
      $('.view-id-ig_front .views-row').each(function(){
-     	var labelAutores = '<span label="Autores">Autores:</span>';
+     	var labelAutores = '<span label="autores">Autores:</span>';
      	$(this).find('.views-field-field-autores div.field-content').prepend(labelAutores);
      });
 })(jQuery);
