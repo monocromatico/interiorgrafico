@@ -8,6 +8,8 @@ jQuery(window).load(function(){
 });
 
 (function ($) {
+
+	/*IG Front*/
      
      $('.view-id-ig_front .views-row').each(function(){
      	var labelAutores = '<span class="labelautores">Autores: </span>';
@@ -17,5 +19,8 @@ jQuery(window).load(function(){
      	$(this).find('.views-field-created').append(autores)
      	$(this).find('.views-field-field-autores').html('');
      });
+
+     $('.view-id-ig_front .view-footer a').attr('href').replace('ediciones','edicion').html('meh');
+
 
 })(jQuery);
