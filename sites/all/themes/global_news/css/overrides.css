@@ -96,3 +96,19 @@ padding: 2px;
 background: none;
 width: auto !important;
 }
+
+/*Front*/
+.view-id-ig_front{}
+.view-id-ig_front .views-row{
+	border-bottom:1px solid;
+	margin:10px 0;
+}
+.view-id-ig_front .views-row .views-field-field-image{
+	float:left;
+}
+.view-id-ig_front .views-row .views-field-title{}
+.view-id-ig_front .views-row .views-field-field-autores{}
+.view-id-ig_front .views-row .views-field-field-autores span{
+	display:inline-block;
+}
+
