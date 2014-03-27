@@ -111,6 +111,9 @@ width: auto !important;
 	margin-right:10px;
 }
 .view-id-ig_front .views-row .views-field-title{}
+.view-id-ig_front .views-row .views-field-created{
+	float:none;
+}
 .view-id-ig_front .views-row .views-field-field-autores {
 }
 .view-id-ig_front .views-row .views-field-field-autores div.field-content{
@@ -123,4 +126,7 @@ width: auto !important;
 	color:#333;
 }
 
-.view-id-ig_front .views-row .views-field-body {}
+.view-id-ig_front .views-row .views-field-body {
+	float:right;
+	max-width:508px;
+}
