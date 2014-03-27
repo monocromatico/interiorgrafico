@@ -108,6 +108,7 @@ width: auto !important;
 }
 .view-id-ig_front .views-row .views-field-field-image{
 	float:left;
+	margin-right:10px;
 }
 .view-id-ig_front .views-row .views-field-title{}
 .view-id-ig_front .views-row .views-field-field-autores {
