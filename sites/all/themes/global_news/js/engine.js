@@ -15,6 +15,7 @@ jQuery(window).load(function(){
 
      	var autores = $(this).find('.views-field-field-autores div.field-content').html();
      	$(this).find('.views-field-created').append(autores)
+     	$(this).find('.views-field-field-autores').html('');
      });
 
 })(jQuery);
