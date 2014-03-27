@@ -107,7 +107,7 @@ width: auto !important;
 	float:left;
 }
 .view-id-ig_front .views-row .views-field-title{}
-.view-id-ig_front .views-row .views-field-field-autores div{
+.view-id-ig_front .views-row .views-field-field-autores div.field-content{
 	display:inline-block;
 	color:#ccc;
 	font-style: italic;
