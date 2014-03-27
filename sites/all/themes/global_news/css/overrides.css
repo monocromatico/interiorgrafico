@@ -107,7 +107,11 @@ width: auto !important;
 	float:left;
 }
 .view-id-ig_front .views-row .views-field-title{}
-.view-id-ig_front .views-row .views-field-field-autores{}
+.view-id-ig_front .views-row .views-field-field-autores div{
+	display:inline-block;
+	color:#ccc;
+	font-style: italic;
+}
 .view-id-ig_front .views-row .views-field-field-autores span{
 	display:inline-block;
 }
