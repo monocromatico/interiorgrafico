@@ -118,7 +118,7 @@ width: auto !important;
 	color:#666;
 	font-style: italic;
 }
-.view-id-ig_front .views-row .views-field-field-autores span.autores{
+.view-id-ig_front .views-row .views-field-field-autores div.field-content span.label-autores{
 	font-style: none;
 	color:#333;
 }
