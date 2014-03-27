@@ -7,6 +7,6 @@ jQuery(window).load(function(){
      jQuery('.view-id-ig_front .views-row').each(function(){
      	console.log('autor')
      	var labelAutores = 'Autores:';
-     	jQuery(this).find('.views-label-field-autores div.field-content').prepend(labelAutores);
+     	jQuery(this).find('.views-field-field-autores div.field-content').prepend(labelAutores);
      });
 });
