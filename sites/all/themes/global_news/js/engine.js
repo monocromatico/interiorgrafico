@@ -8,8 +8,13 @@ jQuery(window).load(function(){
 });
 
 (function ($) {
+     
      $('.view-id-ig_front .views-row').each(function(){
-     	var labelAutores = '<span class="labelautores">Autores:</span>';
+     	var labelAutores = '<span class="labelautores">Autores: </span>';
      	$(this).find('.views-field-field-autores div.field-content').prepend(labelAutores);
+
+     	var autores = $(this).find('.views-field-field-autores div.field-content');
+     	$(this).find('.views-field-created').append(autores)
      });
+     
 })(jQuery);
