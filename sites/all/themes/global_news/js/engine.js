@@ -20,7 +20,8 @@ jQuery(window).load(function(){
      	$(this).find('.views-field-field-autores').html('');
      });
 
-     $('.view-id-ig_front .view-footer a').text('Ver más').attr('href').replace('ediciones','edicion');
+     var footerView = $('.view-id-ig_front .view-footer a').attr('href').replace('ediciones','edicion')
+     $('.view-id-ig_front .view-footer a').text('Ver más').attr('href',footerView);
 
 
 })(jQuery);
