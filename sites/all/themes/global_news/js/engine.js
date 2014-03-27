@@ -13,7 +13,7 @@ jQuery(window).load(function(){
      	var labelAutores = '<span class="labelautores">Autores: </span>';
      	$(this).find('.views-field-field-autores div.field-content').prepend(labelAutores);
 
-     	var autores = $(this).html('.views-field-field-autores div.field-content');
+     	var autores = $(this).find('.views-field-field-autores div.field-content').html();
      	$(this).find('.views-field-created').append(autores)
      });
 
