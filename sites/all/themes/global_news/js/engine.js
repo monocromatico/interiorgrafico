@@ -13,4 +13,4 @@ jQuery(window).load(function(){
      	var labelAutores = 'Autores:';
      	$(this).find('.views-field-field-autores div.field-content').prepend(labelAutores);
      });
-});
+})(jQuery);
