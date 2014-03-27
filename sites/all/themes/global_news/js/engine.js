@@ -3,4 +3,8 @@ jQuery(window).load(function(){
   		var urleditions = jQuery(this).find('a').attr('href').replace('ediciones','edicion');
    		jQuery(this).find('a').attr('href',urleditions);
   });
+
+     jQuery('.view-id-ig_front .views-row ').each(function(){
+     	jQuery(this).find('.views-label-field-autores div.field-content').prepend('Autores:');
+     });
 });

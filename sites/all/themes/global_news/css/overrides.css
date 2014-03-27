@@ -103,7 +103,8 @@ width: auto !important;
 	border-bottom:1px solid #ddd;
 	overflow:hidden;
 	clear:both;
-	margin:10px 0;
+	margin:9px 0;
+	padding:10px 0;
 }
 .view-id-ig_front .views-row .views-field-field-image{
 	float:left;
