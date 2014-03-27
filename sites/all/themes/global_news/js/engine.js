@@ -4,9 +4,13 @@ jQuery(window).load(function(){
    		jQuery(this).find('a').attr('href',urleditions);
   });
 
-     jQuery('.view-id-ig_front .views-row').each(function(){
+
+});
+
+(function ($) {
+     $('.view-id-ig_front .views-row').each(function(){
      	console.log('autor')
      	var labelAutores = 'Autores:';
-     	jQuery(this).find('.views-field-field-autores div.field-content').prepend(labelAutores);
+     	$(this).find('.views-field-field-autores div.field-content').prepend(labelAutores);
      });
 });
