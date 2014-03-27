@@ -118,8 +118,9 @@ width: auto !important;
 	color:#666;
 	font-style: italic;
 }
-.view-id-ig_front .views-row .views-field-field-autores span{
-	display:inline-block;
+.view-id-ig_front .views-row .views-field-field-autores span.autores{
+	font-style: none;
+	color:#333;
 }
 
 .view-id-ig_front .views-row .views-field-body {}
