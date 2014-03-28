@@ -63,6 +63,7 @@ margin-bottom: 10px;
 }
 
 #block-follow-site div.follow-links .follow-link-wrapper {
+	background: none;
 	border:0;
 	width: 20px;
 	float:left;
@@ -74,6 +75,8 @@ margin-bottom: 10px;
 	text-indent:10000px;
 	overflow:hidden;
 	float:none;
+	height:36px;
+	border:0;
 
 }
 
