@@ -59,7 +59,9 @@ margin-bottom: 10px;
 #block-views-indice-de-edicion-block{
 	clear:both;
 }
-
+#block-views-indice-de-edicion-block ul li a{
+	font-weight:normal;
+}
 
 /*Footer*/
 #footer .content p {
@@ -154,6 +156,13 @@ width: auto !important;
 }
 
 /*PrintLink Node data*/
+
+#block-views-articuo-data-block{
+	overflow:hidden;
+	clear:both;
+	margin-bottom:20px;
+}
+
 body.node-type-articulo div.field-name-field-addthis-art{
 	float:right;
 	z-index:10;
