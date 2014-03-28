@@ -33,5 +33,5 @@ if ($('body').hasClass('front')){
 }
 
 /*Print Links Relocation*/
-	$('body.node-type-articulo')find('.field-name-field-addthis-art').appendTo('#block-views-articuo-data-block');
+	$('body.node-type-articulo').find('.field-name-field-addthis-art').appendTo('#block-views-articuo-data-block');
 })(jQuery);
