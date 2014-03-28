@@ -146,7 +146,12 @@ width: auto !important;
 	float:right;
 	max-width:508px;
 }
+
 /*PrintLink Node data*/
+body.node-type-articulo div.field-name-field-addthis-art{
+	float:right;
+	width:150px;
+}
 span.print-link {
 	display:none;
 }
