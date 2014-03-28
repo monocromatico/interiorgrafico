@@ -181,7 +181,8 @@ span.print-link.node-data {
 .view-blog .views-row {
 	clear:both;
 	overflow:hidden;
-	border-bottom:1px dashed #eee;
+	border-bottom:1px dashed #ccc;
+	padding:15px 0;
 }
 .view-blog .views-field-title{}
 .view-blog .views-field-title a {
@@ -189,9 +190,9 @@ span.print-link.node-data {
 	font-size:13px;
 	color:#1f4f82
 }
-
+.view-blog .views-field-body{}
 .view-blog .views-field-field-blog-image {
 	float:left;
-	margin: 10px 10px 0px 0px;
+	margin: 0px 10px 0px 0px;
 }
 .view-blog .views-field-field-blog-image img{}
