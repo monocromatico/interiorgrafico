@@ -178,6 +178,11 @@ span.print-link.node-data {
 
 
 /*Blog*/
+.view-blog .views-row {
+	clear:both;
+	overflow:hidden;
+	border-bottom:1px dashed #eee;
+}
 .view-blog .views-field-title{}
 .view-blog .views-field-title a {
 	font-weight:bold;
@@ -187,5 +192,6 @@ span.print-link.node-data {
 
 .view-blog .views-field-field-blog-image {
 	float:left;
+	margin: 10px 10px 0px 0px;
 }
 .view-blog .views-field-field-blog-image img{}
