@@ -33,6 +33,5 @@ if ($('body').hasClass('front')){
 }
 
 /*Print Links Relocation*/
-	var printLink = $('body.node-type-articulo').find('span.print-link').html();
-	$('body.node-type-articulo #block-views-articuo-data-block .view .view-content .views-row').append(printLink).addClass('node-data');
+	$('body.node-type-articulo')find('.field-name-field-addthis-art').appendTo('#block-views-articuo-data-block');
 })(jQuery);
