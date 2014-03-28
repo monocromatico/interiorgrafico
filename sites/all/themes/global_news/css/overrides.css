@@ -13,12 +13,17 @@ margin-bottom: 10px;
 	display:block;
 }
 
+/*Header Logo UG*/
 #block-block-9{
 	display:inline-block;
 	float:right;
-	margin-top:18px;
+	margin-top:0px;
 }
-
+#block-block-9 p{
+	margin:0;
+}
+#block-block-9 img{
+}
 /*Ediciones Views*/
 .view-ediciones .views-row{
 	border-bottom:1px dashed #ccc;
