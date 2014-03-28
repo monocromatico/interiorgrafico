@@ -21,7 +21,9 @@ jQuery(window).load(function(){
      });
 
      var footerView = $('.view-id-ig_front .view-footer a').attr('href').replace('ediciones','edicion')
-     $('.view-id-ig_front .view-footer a').text('Ver más').attr('href',footerView);
+     $('.view-id-ig_front .view-footer a').text('Todos los artículos de esta edicion').attr('href',footerView);
 
-
+/*Print Links Relocation*/
+	var printLink = $('body.node-type-articulo').find('span.print-link').addClass('node-data');
+	$('body.node-type-articulo #block-views-articuo-data-block .view .view-content .views-row').append(printLink);
 })(jQuery);

@@ -133,3 +133,11 @@ width: auto !important;
 	float:right;
 	max-width:508px;
 }
+/*PrintLink Node data*/
+span.print-link {
+	display:none;
+}
+
+span.print-link.node-data {
+	display:block;
+}
