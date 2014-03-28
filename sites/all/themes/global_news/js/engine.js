@@ -22,14 +22,14 @@ jQuery(window).load(function(){
 
 if ($('body').hasClass('front')){
 	function frontpageEngine(){
-		alert('(ノ°□°)ノ彡┻━┻');
+		console.log('(ノ°□°)ノ彡┻━┻');
 	     var footerView = $('.view-id-ig_front .view-footer a').attr('href').replace('ediciones','edicion');
 	     $('.view-id-ig_front .view-footer a').text('Todos los artículos de esta edicion').attr('href',footerView);
 	}
 	
 	frontpageEngine();
 }else{
-	alert('┬─┬ノ(º_ºノ)')
+	console.log('┬─┬ノ(º_ºノ)')
 }
 
 /*Print Links Relocation*/
