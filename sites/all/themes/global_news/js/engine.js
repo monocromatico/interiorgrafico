@@ -20,8 +20,14 @@ jQuery(window).load(function(){
      	$(this).find('.views-field-field-autores').html('');
      });
 
-     var footerView = $('.view-id-ig_front .view-footer a').attr('href').replace('ediciones','edicion')
-     $('.view-id-ig_front .view-footer a').text('Todos los artículos de esta edicion').attr('href',footerView);
+if ($('body').hasClass('.front')){
+	function frontpageEngine(){
+	     var footerView = $('.view-id-ig_front .view-footer a').attr('href').replace('ediciones','edicion');
+	     $('.view-id-ig_front .view-footer a').text('Todos los artículos de esta edicion').attr('href',footerView);
+	}
+	
+	frontpageEngine();
+}
 
 /*Print Links Relocation*/
 	var printLink = $('body.node-type-articulo').find('span.print-link').addClass('node-data').html();
