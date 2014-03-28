@@ -22,11 +22,14 @@ jQuery(window).load(function(){
 
 if ($('body').hasClass('.front')){
 	function frontpageEngine(){
+		console.log('(╯°□°）╯︵ ┻━┻');
 	     var footerView = $('.view-id-ig_front .view-footer a').attr('href').replace('ediciones','edicion');
 	     $('.view-id-ig_front .view-footer a').text('Todos los artículos de esta edicion').attr('href',footerView);
 	}
 	
 	frontpageEngine();
+}else{
+	console.log('┬─┬ノ( º _ ºノ)')
 }
 
 /*Print Links Relocation*/
