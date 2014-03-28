@@ -20,7 +20,7 @@ jQuery(window).load(function(){
      	$(this).find('.views-field-field-autores').html('');
      });
 
-if ($('body').hasClass('.front')){
+if ($('body').hasClass('front')){
 	function frontpageEngine(){
 		console.log('(╯°□°）╯︵ ┻━┻');
 	     var footerView = $('.view-id-ig_front .view-footer a').attr('href').replace('ediciones','edicion');
