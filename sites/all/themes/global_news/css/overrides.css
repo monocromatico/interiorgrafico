@@ -13,17 +13,25 @@ margin-bottom: 10px;
 	display:block;
 }
 
+/*Logo*/
+#block-delta-blocks-logo{
+	margin:15px 0 22px 15px;
+}
+
 /*Header Logo UG*/
 #block-block-9{
 	display:inline-block;
 	float:right;
 	margin-top:0px;
+	padding:10px 0;
 }
-#block-block-9 p{
-	margin:0;
-}
-#block-block-9 img{
-}
+	#block-block-9 p{
+		margin:0;
+	}
+	#block-block-9 img{
+		width:87%;
+		height:87%;
+	}
 /*Ediciones Views*/
 .view-ediciones .views-row{
 	border-bottom:1px dashed #ccc;
