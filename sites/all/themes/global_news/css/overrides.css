@@ -234,3 +234,10 @@ padding:10px;
 	padding:0;
 	margin:0;
 }
+
+/*Lists*/
+ul li,
+ol li {
+padding-left: 20px;
+list-style-position: inside;
+}
