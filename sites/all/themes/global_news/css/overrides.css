@@ -209,7 +209,7 @@ span.print-link.node-data {
 	display:none;
 }
 .view-blog.view-display-id-block .views-row-first .views-field-field-blog-image,
-.view-blog.view-display-id-block .views-row-blockt .views-field-body,
-.view-blog.view-display-id-block .views-row-blockt .views-field-view-node,{
+.view-blog.view-display-id-block .views-row-first .views-field-body,
+.view-blog.view-display-id-block .views-row-firstt .views-field-view-node,{
 	display:block;
 }
