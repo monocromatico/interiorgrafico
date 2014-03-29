@@ -213,3 +213,8 @@ span.print-link.node-data {
 .view-blog.view-display-id-block .views-row-firstt .views-field-view-node{
 	display:block;
 }
+
+.views-field-changed {
+	color:#666;
+	font-style:italic;
+}
