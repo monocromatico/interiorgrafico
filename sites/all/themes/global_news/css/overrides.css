@@ -236,8 +236,8 @@ padding:10px;
 }
 
 /*Lists*/
-ul li,
-ol li {
-padding-left: 20px;
+.node-page ul li,
+.node-page ol li {
+padding-left: 10px;
 list-style-position: inside;
 }
