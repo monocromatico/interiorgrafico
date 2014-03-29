@@ -191,10 +191,11 @@ span.print-link.node-data {
 	color:#1f4f82
 }
 .view-blog .views-field-changed{
-	color:#ccc;
+	color:#666;
 }
 .view-blog .views-field-body{}
-.view-blog .views-field-field-blog-image {
+.view-blog .views-field-field-blog-image,
+.view-blog .views-field-field-image {
 	float:left;
 	margin: 0px 10px 0px 0px;
 }
