@@ -152,7 +152,7 @@ width: auto !important;
 
 .view-id-ig_front .views-row .views-field-body {
 	float:right;
-	max-width:508px;
+	max-width:408px;
 }
 
 /*PrintLink Node data*/
@@ -190,9 +190,26 @@ span.print-link.node-data {
 	font-size:13px;
 	color:#1f4f82
 }
+.view-blog .views-field-changed{
+	color:#ccc;
+}
 .view-blog .views-field-body{}
 .view-blog .views-field-field-blog-image {
 	float:left;
 	margin: 0px 10px 0px 0px;
 }
 .view-blog .views-field-field-blog-image img{}
+
+.view-blog.view-display-id-block {}
+.view-blog.view-display-id-block .views-row-first {}
+.view-blog.view-display-id-block .views-row {}
+.view-blog.view-display-id-block .views-row .views-field-field-blog-image,
+.view-blog.view-display-id-block .views-row .views-field-body,
+.view-blog.view-display-id-block .views-row .views-field-view-node,{
+	display:none;
+}
+.view-blog.view-display-id-block .views-row-first .views-field-field-blog-image,
+.view-blog.view-display-id-block .views-row-blockt .views-field-body,
+.view-blog.view-display-id-block .views-row-blockt .views-field-view-node,{
+	display:block;
+}
