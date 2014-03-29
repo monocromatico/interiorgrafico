@@ -205,11 +205,11 @@ span.print-link.node-data {
 .view-blog.view-display-id-block .views-row {}
 .view-blog.view-display-id-block .views-row .views-field-field-blog-image,
 .view-blog.view-display-id-block .views-row .views-field-body,
-.view-blog.view-display-id-block .views-row .views-field-view-node,{
+.view-blog.view-display-id-block .views-row .views-field-view-node{
 	display:none;
 }
 .view-blog.view-display-id-block .views-row-first .views-field-field-blog-image,
 .view-blog.view-display-id-block .views-row-first .views-field-body,
-.view-blog.view-display-id-block .views-row-firstt .views-field-view-node,{
+.view-blog.view-display-id-block .views-row-firstt .views-field-view-node{
 	display:block;
 }
