@@ -222,8 +222,13 @@ span.print-link.node-data {
 
 /*View Front Sticky*/
 .view-front-sticky {
-
+padding:10px;
 }
+
+.view-front-sticky .views-field-title{
+	font-size:18px;
+}
+
 .view-front-sticky .node,
 .view-front-sticky p{
 	padding:0;
