@@ -1,4 +1,4 @@
-#block-views-world-news-block-1 {
+ #block-views-world-news-block-1 {
 float: none;
 overflow:hidden;
 width: 100%;
@@ -129,6 +129,11 @@ width: auto !important;
 	clear:both;
 	margin:9px 0;
 	padding:10px 0;
+}
+
+.view-id-ig_front .attachment .views-row {
+	margin-top:0;
+	padding-top:0;
 }
 .view-id-ig_front .views-row .views-field-field-image{
 	float:left;
