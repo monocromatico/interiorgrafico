@@ -160,6 +160,9 @@ width: auto !important;
 	max-width:408px;
 }
 
+.view-id-ig_front .attachment .views-row .views-field-body {
+	width:100%;
+}
 /*PrintLink Node data*/
 
 #block-views-articuo-data-block{
