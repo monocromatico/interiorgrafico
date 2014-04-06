@@ -162,6 +162,8 @@ width: auto !important;
 
 .view-id-ig_front .attachment .views-row .views-field-body {
 	width:100%;
+	max-width:100%;
+	float:none;
 }
 /*PrintLink Node data*/
 
