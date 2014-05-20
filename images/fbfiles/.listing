@@ -1,0 +1,11 @@
+drwx---r-x    7 4687249    inetuser         4096 Sep  2  2013 .
+drwx---r-x    9 4687249    inetuser         4096 Mar  4 21:38 ..
+drwx---r-x    3 4687249    inetuser         4096 Sep  2  2013 avatars
+drwx---r-x    2 4687249    inetuser         4096 Sep  2  2013 category_images
+-rw----r--    1 4687249    inetuser         3015 Sep  2  2013 dummy.gif
+-rw----r--    1 4687249    inetuser         4408 Sep  2  2013 dummy.jpg
+-rw----r--    1 4687249    inetuser         5657 Sep  2  2013 dummy.png
+drwx---r-x    2 4687249    inetuser         4096 Sep  2  2013 editor
+drwx---r-x    2 4687249    inetuser         4096 Sep  2  2013 files
+drwx---r-x    2 4687249    inetuser         4096 Sep  2  2013 images
+-rw----r--    1 4687249    inetuser          198 Sep  2  2013 index.php
