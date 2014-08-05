@@ -14,6 +14,7 @@ var getlocations_leaflet_settings = [];
 var getlocations_leaflet_overlays = [];
 var getlocations_leaflet_layerscontrol = [];
 var getlocations_leaflet_data = [];
+var getlocations_leaflet_geocoder = [];
 
 (function ($) {
   Drupal.behaviors.getlocations_leaflet = {
@@ -78,6 +79,29 @@ var getlocations_leaflet_data = [];
         });
       }
 
+      // show_maplinks
+      function getlocations_leaflet_show_maplinks(key, glid, m, a) {
+        $("div#getlocations_leaflet_map_links_" + key + " ul").append('<li><a href="#maptop_' + key + '" class="glid-' + glid + '">' + m.options.title + '</a></li>');
+        $("div#getlocations_leaflet_map_links_" + key + " a.glid-" + glid).click(function() {
+          $("div#getlocations_leaflet_map_links_" + key + " a").removeClass('active');
+          $("div#getlocations_leaflet_map_links_" + key + " a.glid-" + glid).addClass('active');
+          if (a.type == 'link') {
+            // relocate
+            window.location = a.data;
+          }
+          else if (a.type == 'popup') {
+            m.fire('click');
+          }
+        });
+      }
+
+      function getlocations_leaflet_deactive_throbber(k) {
+        $("#getlocations_leaflet_gps_throbber_" + k).removeClass('getlocations_leaflet_gps_throbber_active');
+        $("#getlocations_leaflet_gps_throbber_" + k).addClass('getlocations_leaflet_gps_throbber_inactive');
+      }
+
+      // end functions
+
       // work over all class 'getlocations_leaflet_canvas'
       $(".getlocations_leaflet_canvas", context).once('getlocations-leaflet-processed', function(index, element) {
         var elemID = $(element).attr('id');
@@ -102,10 +126,8 @@ var getlocations_leaflet_data = [];
           getlocations_leaflet_layerscontrol[key] = {};
 
           // get the map
-          getlocations_leaflet_map[key] = L.map('getlocations_leaflet_canvas_' + key, map_opts);
-          // another way
-          //var map = L.map($(element).get(0), map_opts);
-          //getlocations_leaflet_map[key] = map;
+          //getlocations_leaflet_map[key] = L.map('getlocations_leaflet_canvas_' + key, map_opts);
+          getlocations_leaflet_map[key] = L.map($(element).get(0), map_opts);
 
           // layers
           var layers = {};
@@ -236,6 +258,28 @@ var getlocations_leaflet_data = [];
             getlocations_leaflet_map[key].addControl(L.control.scale(scaleopts));
           }
 
+          // Geocoder control
+          if (map_settings.geocoder) {
+            var geo_opts = {};
+            geo_opts.placeholder = Drupal.t("Search...");
+            geo_opts.errorMessage = Drupal.t("Nothing found.");
+            geo_opts.collapsed = (map_settings.geocodercollapsed ? true : false);
+            if (map_settings.geocoderposition) {
+              geo_opts.position = map_settings.geocoderposition;
+            }
+            if (map_settings.geocodersrc == 'b' && map_settings.geocoder_bing_key) {
+              geo_opts.geocoder = L.Control.Geocoder.bing(map_settings.geocoder_bing_key);
+            }
+            else if (map_settings.geocodersrc == 'm' && map_settings.geocoder_mapquest_key) {
+              geo_opts.geocoder = L.Control.Geocoder.mapQuest(map_settings.geocoder_mapquest_key);
+            }
+            else {
+              geo_opts.geocoder = L.Control.Geocoder.nominatim();
+            }
+            getlocations_leaflet_geocoder[key] = L.Control.geocoder(geo_opts);
+            getlocations_leaflet_map[key].addControl(getlocations_leaflet_geocoder[key]);
+          }
+
           // latlons data
           if (datanum > 0) {
 
@@ -285,7 +329,7 @@ var getlocations_leaflet_data = [];
               var marker_type = vector.type;
 
               // check for duplicates
-              var hash = lat + lon;
+              var hash = new String(lat + lon);
               if (getlocations_leaflet_markers[key].coords[hash] == null) {
                 getlocations_leaflet_markers[key].coords[hash] = 1;
               }
@@ -379,7 +423,6 @@ var getlocations_leaflet_data = [];
               else {
                 Marker.options.clickable = false;
               }
-
               // add the marker to the group(s)
               if (map_settings.category_showhide_buttons && cat) {
                 for (var c in categories) {
@@ -390,6 +433,13 @@ var getlocations_leaflet_data = [];
               }
               else {
                 Markers['loc'].addLayer(Marker);
+              }
+
+              // show_maplinks
+              if (markeraction && markeraction.type && markeraction.data) {
+                if (title && map_settings.show_maplinks) {
+                  getlocations_leaflet_show_maplinks(key, glid, Marker, markeraction);
+                }
               }
 
               // add marker to getlocations_leaflet_markers
@@ -443,6 +493,55 @@ var getlocations_leaflet_data = [];
                 bounds = L.latLngBounds(sw, ne).pad(0.1);
                 getlocations_leaflet_map[key].fitBounds(bounds, {reset: true});
             }
+          }
+
+          // Usermarker
+          if (map_settings.usermarker) {
+            var usermarker = null;
+            $("#getlocations_leaflet_gps_show_" + key).click( function() {
+              $("#getlocations_leaflet_gps_throbber_" + key).removeClass('getlocations_leaflet_gps_throbber_inactive');
+              $("#getlocations_leaflet_gps_throbber_" + key).addClass('getlocations_leaflet_gps_throbber_active');
+              if (usermarker) {
+                getlocations_leaflet_map[key].removeLayer(usermarker);
+                usermarker = null;
+              }
+              getlocations_leaflet_map[key].on("locationfound", function(location) {
+                if (! usermarker) {
+                  usermarker_opts = {
+                    pulsing: map_settings.usermarker_pulsing,
+                    smallIcon: map_settings.usermarker_smallicon,
+                    circleOpts: {
+                      stroke: map_settings.usermarker_circle_stroke,
+                      color: map_settings.usermarker_circle_strokecolor,
+                      weight: map_settings.usermarker_circle_strokeweight,
+                      opacity: map_settings.usermarker_circle_strokeopacity,
+                      fillOpacity: map_settings.usermarker_circle_fillopacity,
+                      fillColor: map_settings.usermarker_circle_fillcolor,
+                      clickable: false
+                    }
+                  };
+                  usermarker = L.userMarker(location.latlng, usermarker_opts).addTo(getlocations_leaflet_map[key]);
+                  usermarker.setLatLng(location.latlng);
+                  if (map_settings.usermarker_accuracy) {
+                    usermarker.setAccuracy(location.accuracy);
+                  }
+                }
+                getlocations_leaflet_deactive_throbber(key);
+              });
+              getlocations_leaflet_map[key].on("locationerror", function(error) {
+                getlocations_leaflet_deactive_throbber(key);
+                alert('Error: location failed. ' + error.message);
+              });
+
+              getlocations_leaflet_map[key].locate({
+                watch: false,
+                locate: true,
+                setView: true,
+                enableHighAccuracy: true
+              });
+
+            });
+
           }
 
         } // end is there really a map?

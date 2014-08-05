@@ -10,9 +10,9 @@ dependencies[] = getlocations_fields
 package = "Location"
 
 
-; Information added by Drupal.org packaging script on 2014-02-28
-version = "7.x-1.12"
+; Information added by Drupal.org packaging script on 2014-06-19
+version = "7.x-1.13"
 core = "7.x"
 project = "getlocations"
-datestamp = "1393615113"
+datestamp = "1403177328"
 

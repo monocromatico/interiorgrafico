@@ -6,10 +6,11 @@ core = 7.x
 php = 5
 dependencies[] = libraries
 files[] = "views/getlocations_plugin_style_map.inc"
+configure = admin/config/services/getlocations
 
-; Information added by Drupal.org packaging script on 2014-02-28
-version = "7.x-1.12"
+; Information added by Drupal.org packaging script on 2014-06-19
+version = "7.x-1.13"
 core = "7.x"
 project = "getlocations"
-datestamp = "1393615113"
+datestamp = "1403177328"
 

@@ -14,6 +14,7 @@
       var gsettings = Drupal.settings.getlocations;
       var nodezoom = '';
       var mark = [];
+      var movelistener = false;
       var map_marker = 'drupal';
       var adrsfield = 'getlocations_address_';
       var namefield = 'getlocations_name_';
@@ -296,6 +297,7 @@
           cityfield_value = '';
           provincefield_value = '';
           countryfield_value = '';
+          countryfield_value_s = '';
           postal_codefield_value = '';
           postal_code_prefix_field_value = '';
           admin_area_level_1 = '';
@@ -332,6 +334,9 @@
             }
             else if (type == 'country') {
               countryfield_value = address_components[i].long_name;
+              if (address_components[i].short_name.length == 2) {
+                countryfield_value_s = address_components[i].short_name.toUpperCase();
+              }
             }
             else if (type == 'postal_code_prefix') {
               postal_code_prefix_field_value = address_components[i].long_name;
@@ -382,15 +387,21 @@
             $("#" + countryfield + k).val(countryfield_value);
           }
           else if ($("#" + countryfield + k).is("select")) {
-            $("#" + countryfield + k + " option").each( function(index) {
-              if (countryfield_value == $(this).text()) {
-                $("#" + countryfield + k).val($(this).val()).attr('selected', 'selected');
-              }
-              // fix 'The Netherlands' which is what google returns
-              if (countryfield_value == 'The Netherlands') {
-                $("#" + countryfield + k).val('NL').attr('selected', 'selected');
-              }
-            });
+            // give two letter code precedence
+            if (countryfield_value_s) {
+              $("#" + countryfield + k).val(countryfield_value_s).attr('selected', 'selected');
+            }
+            else {
+              $("#" + countryfield + k + " option").each( function(index) {
+                if (countryfield_value == $(this).text()) {
+                  $("#" + countryfield + k).val($(this).val()).attr('selected', 'selected');
+                }
+                // fix 'The Netherlands' which is what google returns
+                if (countryfield_value == 'The Netherlands') {
+                  $("#" + countryfield + k).val('NL').attr('selected', 'selected');
+                }
+              });
+            }
           }
         } // set_address_components
 
@@ -398,6 +409,10 @@
           // remove existing marker
           if (mark[mkey]) {
             mark[mkey].setMap();
+          }
+          if (movelistener) {
+            google.maps.event.removeListener(movelistener);
+            movelistener = false;
           }
           marker = Drupal.getlocations.getIcon(map_marker);
           mark[mkey] = new google.maps.Marker({
@@ -420,7 +435,7 @@
             $("#" + lonfield + mmkey).val(lng);
             streetviewSetupButtonDo(mkey);
           });
-          google.maps.event.addListener(mmap, "click", function (e) {
+          movelistener = google.maps.event.addListener(mmap, "click", function (e) {
             p = e.latLng;
             mmmap.panTo(p);
             mark[mmkey].setPosition(p);
@@ -579,7 +594,7 @@
               //$(statusdiv).html(statusmsg);
             },
             function(error) {
-              statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getlocations.geolocationErrorMessages(error.code) + ".";
+              statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getlocations.geolocationErrorMessages(error) + ".";
               $(statusdiv).html(statusmsg);
             }, {maximumAge:10000}
           );

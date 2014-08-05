@@ -89,12 +89,7 @@ function getlocations_search_menu() {
  */
 function getlocations_search($which = 'page') {
   $contents = '';
-  $getmap = getlocations_search_getmap($which);
-  $map = $getmap['map'];
-  $mapid = $getmap['mapid'];
-  $form = drupal_get_form('getlocations_search_form', $which, $mapid);
-  $contents .= drupal_render($form);
-  $contents .= $map;
+  $contents .= theme('getlocations_search', array('which' => $which));
   return $contents;
 }
 
@@ -206,6 +201,16 @@ function getlocations_search_form($form, &$form_state, $which, $mapid) {
       '#value' => t('Go')
     );
   }
+  else {
+    if ($getlocations_search_defaults['geocode_button_enable']) {
+      // geocode button
+      $form['getlocations_search_geocode_button_' . $mapid] = array('#markup' => '');
+    }
+  }
+  if ($getlocations_search_defaults['reset_button_enable']) {
+    // Reset button
+    $form['getlocations_search_reset_button_' . $mapid] = array('#markup' => '');
+  }
 
   return $form;
 }
@@ -272,7 +277,7 @@ function getlocations_search_getmap($which = 'page') {
     'geojson_enable', 'geojson_data', 'geojson_options', 'nokeyboard', 'nodoubleclickzoom',
     'zoomcontrolposition', 'pancontrolposition', 'mapcontrolposition', 'scalecontrolposition', 'svcontrolposition',
     'highlight_enable', 'highlight_strokecolor', 'highlight_strokeopacity', 'highlight_strokeweight', 'highlight_fillcolor', 'highlight_fillopacity', 'highlight_radius',
-    'getdirections_link'
+    'getdirections_link', 'gps_button', 'gps_button_label', 'gps_marker', 'gps_marker_title', 'gps_bubble', 'gps_geocode', 'gps_center'
   );
 
   foreach ($keys AS $key) {
@@ -315,8 +320,27 @@ function getlocations_search_getmap($which = 'page') {
           if (! isset($location['key'])) {
             $location['key'] = '';
           }
-          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($location['title']), ENT_QUOTES);
-          $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'] , $location['key'], '', '');
+          if (isset($location['lid']) && $location['lid']) {
+            $id = $location['lid'];
+          }
+          elseif (isset($location['nid']) && $location['nid']) {
+            $id = $location['nid'];
+            $location['key'] = 'nid';
+          }
+          elseif (isset($location['uid']) && $location['uid']) {
+            $id = $location['uid'];
+            $location['key'] = 'uid';
+          }
+          elseif (isset($location['tid']) && $location['tid']) {
+            $id = $location['tid'];
+            $location['key'] = 'tid';
+          }
+          elseif (isset($location['cid']) && $location['cid']) {
+            $id = $location['cid'];
+            $location['key'] = 'cid';
+          }
+          $name = htmlspecialchars_decode(isset($location['name']) ? strip_tags($location['name']) : strip_tags($location['title']), ENT_QUOTES);
+          $latlons[] = array($location['latitude'], $location['longitude'], $id, $name, $location['marker'] , $location['key'], '', '');
           $ct++;
         }
       }
@@ -647,6 +671,11 @@ function getlocations_search_load_all_locations($search_type = 'all') {
  */
 function getlocations_search_theme() {
   return array(
+    'getlocations_search' => array(
+      'variables' => array(
+        'which' => NULL,
+      ),
+    ),
     'getlocations_search_form' => array(
       'render element' => 'form',
     ),
@@ -663,6 +692,29 @@ function getlocations_search_theme() {
       'template' => 'getlocations_search_box',
     ),
   );
+}
+
+/**
+ * Themes the search page.
+ *
+ * @param array $variables
+ *
+ * @return
+ *   Returns $content
+ *
+ */
+function theme_getlocations_search($variables) {
+  $which = $variables['which'];
+  $contents = '';
+  $contents .= '<div id="getlocations_search_' . $which . '">';
+  $getmap = getlocations_search_getmap($which);
+  $map = $getmap['map'];
+  $mapid = $getmap['mapid'];
+  $form = drupal_get_form('getlocations_search_form', $which, $mapid);
+  $contents .= drupal_render($form);
+  $contents .= $map;
+  $contents .= '</div>';
+  return $contents;
 }
 
 /**
@@ -698,8 +750,8 @@ function theme_getlocations_search_form($variables) {
   if (getlocations_is_mobile() && isset($form['getlocations_search_geolocation_button_' . $mapid])) {
     $geolocation_button = '<div id="getlocations_search_geolocation_button_wrapper_' . $mapid . '"><p>';
     $geolocation_button .= '<input type="button" value="' . t('Find current Location') . '" title="' . t('Get the latitude and longitude for this location from the browser') . '" id="getlocations_search_geolocation_button_' . $mapid . '" class="form-submit" />&nbsp;';
-    $geolocation_button .= '<span id="getlocations_search_geolocation_status_ok_' . $mapid . '" class="js-hide" ><img src="' . url(GETLOCATIONS_PATH . '/images/ok.png') . '" title="' . t('Geolocation OK') . '" /></span>';
-    $geolocation_button .= '<span id="getlocations_search_geolocation_status_err_' . $mapid . '" class="js-hide" ><img src="' . url(GETLOCATIONS_PATH . '/images/error.png') . '" title="' . t('Geolocation failed') . '" /></span>';
+    $geolocation_button .= '<span id="getlocations_search_geolocation_status_ok_' . $mapid . '" class="js-hide" ><img src="' . base_path() . GETLOCATIONS_PATH . '/images/ok.png' . '" title="' . t('Geolocation OK') . '" /></span>';
+    $geolocation_button .= '<span id="getlocations_search_geolocation_status_err_' . $mapid . '" class="js-hide" ><img src="' . base_path() . GETLOCATIONS_PATH . '/images/error.png' . '" title="' . t('Geolocation failed') . '" /></span>';
     $geolocation_button .= '</p>';
     $geolocation_button .= '<p>' . t('Use the browser to find your current location') . '</p></div>';
     $form['getlocations_search_geolocation_button_' . $mapid]['#markup'] = $geolocation_button;
@@ -708,6 +760,22 @@ function theme_getlocations_search_form($variables) {
   if (isset($form['getlocations_search_country_' . $mapid]['#markup'])) {
     $restrict_country = '<p>' . t('Restrict the search to %c', array('%c' => getlocations_get_country_name($form['getlocations_search_country_' . $mapid]['#markup']))) . '</p>';
     $form['getlocations_search_country_' . $mapid]['#markup'] = $restrict_country;
+  }
+
+  // geocode button
+  if (isset($form['getlocations_search_geocode_button_' . $mapid]['#markup'])) {
+    $geocode_button = '<div id="getlocations_search_geocode_button_wrapper_' . $mapid . '">';
+    $geocode_button .= '<input type="button" value="' . t('Geocode') . '" title="' . t('Geocode this address') . '" id="getlocations_search_geocode_button_' . $mapid . '" class="form-submit" />';
+    $geocode_button .= '</div>';
+    $form['getlocations_search_geocode_button_' . $mapid]['#markup'] = $geocode_button;
+  }
+
+  // reset button
+  if (isset($form['getlocations_search_reset_button_' . $mapid]['#markup'])) {
+    $reset_button = '<div id="getlocations_search_reset_button_wrapper_' . $mapid . '">';
+    $reset_button .= '<input type="button" value="' . t('Reset') . '" title="' . t('Reset this form') . '" id="getlocations_search_reset_button_' . $mapid . '" class="form-submit" />';
+    $reset_button .= '</div>';
+    $form['getlocations_search_reset_button_' . $mapid]['#markup'] = $reset_button;
   }
 
   $output .= drupal_render_children($form);
@@ -1009,6 +1077,15 @@ function getlocations_search_defaults() {
     'highlight_fillopacity'     => $getlocations_defaults['highlight_fillopacity'],
     'highlight_radius'          => $getlocations_defaults['highlight_radius'],
     'getdirections_link'        => $getlocations_defaults['getdirections_link'],
+    'geocode_button_enable'     => 0,
+    'reset_button_enable'       => 0,
+    'gps_button'                => 0,
+    'gps_button_label'          => $getlocations_defaults['gps_button_label'],
+    'gps_marker'                => $getlocations_defaults['gps_marker'],
+    'gps_marker_title'          => $getlocations_defaults['gps_marker_title'],
+    'gps_bubble'                => $getlocations_defaults['gps_bubble'],
+    'gps_geocode'               => $getlocations_defaults['gps_geocode'],
+    'gps_center'                => $getlocations_defaults['gps_center'],
   );
 
   $settings = variable_get('getlocations_search_defaults', $defaults);
@@ -1209,9 +1286,9 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
     $fields[] = 'g.latitude';
     $fields[] = 'g.longitude';
     $fields[] = 'g.marker';
-#    if (getlocations_fields_column_check('data')) {
+    if (getlocations_fields_column_check('data')) {
       $fields[] = 'g.data';
-#    }
+    }
     $fields[] = 'f.nid';
     $fields[] = 'f.uid';
     $fields[] = 'f.tid';

@@ -388,9 +388,7 @@ var getlocations_data = [];
           // make the map
           getlocations_map[key] = new google.maps.Map(document.getElementById("getlocations_map_canvas_" + key), mapOpts);
           // another way
-          //var map = new google.maps.Map($(element).get(0), mapOpts);
-          // Store a reference to the map object so other code can interact with it.
-          //getlocations_map[key] = map;
+          // getlocations_map[key] = new google.maps.Map($(element).get(0), mapOpts);
 
           // OpenStreetMap
           if (useOpenStreetMap) {
@@ -851,8 +849,7 @@ var getlocations_data = [];
     }
 
     // check for duplicates
-    var hash = lat + lon;
-    hash = hash.replace(".","").replace(",", "").replace("-","");
+    var hash = new String(lat + lon);
     if (getlocations_markers[mkey].coords[hash] == null) {
       getlocations_markers[mkey].coords[hash] = 1;
     }
@@ -1192,13 +1189,23 @@ var getlocations_data = [];
     return errstr;
   };
 
-  Drupal.getlocations.geolocationErrorMessages = function(errcode) {
-    var codes = [
-      Drupal.t("due to an unknown error"),
-      Drupal.t("because you didn't give me permission"),
-      Drupal.t("because your browser couldn't determine your location"),
-      Drupal.t("because it was taking too long to determine your location")];
-    return codes[errcode];
+  Drupal.getlocations.geolocationErrorMessages = function(error) {
+    var ret = '';
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        ret = Drupal.t("because you didn't give me permission");
+        break;
+      case error.POSITION_UNAVAILABLE:
+        ret = Drupal.t("because your browser couldn't determine your location");
+        break;
+      case error.TIMEOUT:
+        ret = Drupal.t("because it was taking too long to determine your location");
+        break;
+      case error.UNKNOWN_ERROR:
+        ret = Drupal.t("due to an unknown error");
+        break;
+    }
+    return ret;
   };
 
 }(jQuery));

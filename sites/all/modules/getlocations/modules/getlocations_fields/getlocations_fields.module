@@ -1872,7 +1872,14 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['highlight_fillopacity']     = $settings['highlight_fillopacity'];
   $getlocations_defaults['highlight_radius']          = $settings['highlight_radius'];
   $getlocations_defaults['getdirections_link']        = $settings['getdirections_link'];
-
+  $getlocations_defaults['gps_button']                = $settings['gps_button'];
+  $getlocations_defaults['gps_button_label']          = $settings['gps_button_label'];
+  $getlocations_defaults['gps_marker']                = $settings['gps_marker'];
+  $getlocations_defaults['gps_marker_title']          = $settings['gps_marker_title'];
+  $getlocations_defaults['gps_bubble']                = $settings['gps_bubble'];
+  $getlocations_defaults['gps_geocode']               = $settings['gps_geocode'];
+  $getlocations_defaults['gps_center']                = $settings['gps_center'];
+  
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
 
@@ -2697,6 +2704,13 @@ function getlocations_fields_defaults() {
     'highlight_fillopacity'     => $getlocations_defaults['highlight_fillopacity'],
     'highlight_radius'          => $getlocations_defaults['highlight_radius'],
     'getdirections_link'        => $getlocations_defaults['getdirections_link'],
+    'gps_button'                => 0,
+    'gps_button_label'          => $getlocations_defaults['gps_button_label'],
+    'gps_marker'                => $getlocations_defaults['gps_marker'],
+    'gps_marker_title'          => $getlocations_defaults['gps_marker_title'],
+    'gps_bubble'                => $getlocations_defaults['gps_bubble'],
+    'gps_geocode'               => $getlocations_defaults['gps_geocode'],
+    'gps_center'                => $getlocations_defaults['gps_center'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
@@ -2891,6 +2905,13 @@ function getlocations_fields_field_info_defaults() {
         'highlight_fillopacity'           => $getlocations_fields_defaults['highlight_fillopacity'],
         'highlight_radius'                => $getlocations_fields_defaults['highlight_radius'],
         'getdirections_link'              => $getlocations_fields_defaults['getdirections_link'],
+        'gps_button'                      => $getlocations_fields_defaults['gps_button'],
+        'gps_button_label'                => $getlocations_fields_defaults['gps_button_label'],
+        'gps_marker'                      => $getlocations_fields_defaults['gps_marker'],
+        'gps_marker_title'                => $getlocations_fields_defaults['gps_marker_title'],
+        'gps_bubble'                      => $getlocations_fields_defaults['gps_bubble'],
+        'gps_geocode'                     => $getlocations_fields_defaults['gps_geocode'],
+        'gps_center'                      => $getlocations_fields_defaults['gps_center'],
       ),
     ),
   );
@@ -3050,6 +3071,13 @@ function getlocations_fields_field_formatter_info_defaults() {
     'highlight_fillopacity'     => $getlocations_defaults['highlight_fillopacity'],
     'highlight_radius'          => $getlocations_defaults['highlight_radius'],
     'getdirections_link'        => $getlocations_defaults['getdirections_link'],
+    'gps_button'                => 0,
+    'gps_button_label'          => $getlocations_defaults['gps_button_label'],
+    'gps_marker'                => $getlocations_defaults['gps_marker'],
+    'gps_marker_title'          => $getlocations_defaults['gps_marker_title'],
+    'gps_bubble'                => $getlocations_defaults['gps_bubble'],
+    'gps_geocode'               => $getlocations_defaults['gps_geocode'],
+    'gps_center'                => $getlocations_defaults['gps_center'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
@@ -3695,6 +3723,7 @@ function getlocations_fields_paths_get($reset = FALSE, $min = FALSE) {
       'getlocations_fields_admin_path'      => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_admin.min.js',
       'getlocations_fields_formatter_path'  => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_formatter.min.js',
       'getlocations_fields_views_path'      => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_views.min.js',
+      'getlocations_fields_search_views_path' => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_search_views.min.js',
     );
   }
   else {
@@ -3705,6 +3734,7 @@ function getlocations_fields_paths_get($reset = FALSE, $min = FALSE) {
       'getlocations_fields_admin_path'      => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_admin.js',
       'getlocations_fields_formatter_path'  => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_formatter.js',
       'getlocations_fields_views_path'      => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_views.js',
+      'getlocations_fields_search_views_path' => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_search_views.js',
     );
   }
 
@@ -3753,6 +3783,7 @@ function getlocations_fields_data_keys($type = 'dd') {
       'sv_pitch'            => 0,
       'mapzoom'             => 12,
       'map_maptype'         => 'Map',
+      'map_settings_allow'  => 0,
       'sv_enable'           => 0,
       'sv_showfirst' => 0,
     );

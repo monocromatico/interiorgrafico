@@ -1,9 +1,496 @@
-commit a4de551
+commit 9264de7
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun May 11 23:23:23 2014 +0100
+
+    better geolocation availability
+
+getlocations.module
+js/getlocations.js
+js/getlocations.min.js
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields.min.js
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+
+commit 3cee77f
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Apr 28 23:00:19 2014 +0100
+
+    vbo support
+
+CHANGELOG.txt
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit e3228a7
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Apr 28 22:59:14 2014 +0100
+
+    formatting for usermarker
+
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.min.js
+
+commit 8d13e2f
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Apr 25 18:22:32 2014 +0100
+
+    fixed markercluster path bug
+
+CHANGELOG.txt
+getlocations.admin.inc
+modules/getlocations_search/getlocations_search.admin.inc
+
+commit a9f15aa
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Apr 25 18:21:52 2014 +0100
+
+    added vbo awareness
+
+modules/getlocations_map/getlocations_map.module
+
+commit 14aa01d
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Apr 21 17:00:17 2014 +0100
+
+    added usermarker plugin to leaflet
+
+modules/getlocations_leaflet/getlocations_leaflet.css
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/plugins/usermarker/img/bluedot.png
+modules/getlocations_leaflet/plugins/usermarker/img/throbber.gif
+modules/getlocations_leaflet/plugins/usermarker/leaflet.usermarker.css
+modules/getlocations_leaflet/plugins/usermarker/leaflet.usermarker.js
+modules/getlocations_leaflet/plugins/usermarker/leaflet.usermarker.min.css
+modules/getlocations_leaflet/plugins/usermarker/leaflet.usermarker.min.js
+
+commit 5b74573
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Apr 21 14:09:07 2014 +0100
+
+    fixed hash variable
+
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+
+commit 84bef09
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Apr 16 13:30:46 2014 +0100
+
+    added README to gps module
+
+CHANGELOG.txt
+modules/getlocations_gps/README.txt
+
+commit 31bc740
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Apr 16 13:30:16 2014 +0100
+
+    fixed fields map gps
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit e8ec508
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Apr 15 10:16:56 2014 +0100
+
+    fixed defaults
+
+getlocations.module
+modules/getlocations_gps/getlocations_gps.module
+
+commit 5689743
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Apr 15 10:16:24 2014 +0100
+
+    cleaned up css
+
+modules/getlocations_gps/getlocations_gps.css
+
+commit e4a3ddf
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Apr 15 10:16:03 2014 +0100
+
+    added min js
+
+modules/getlocations_gps/js/getlocations_gps.min.js
+
+commit 0ed6f06
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Apr 13 18:29:48 2014 +0100
+
+    added getlocations_gps
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_gps/getlocations_gps.css
+modules/getlocations_gps/getlocations_gps.info
+modules/getlocations_gps/getlocations_gps.install
+modules/getlocations_gps/getlocations_gps.module
+modules/getlocations_gps/images/throbber.gif
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_map/getlocations_map.module
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit f4af37f
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Apr 13 17:48:42 2014 +0100
+
+    reorganised display_options form
+
+getlocations.module
+
+commit e483876
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Apr 13 17:47:18 2014 +0100
+
+    better hash var
+
+js/getlocations.js
+js/getlocations.min.js
+
+commit 802e886
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Apr 3 03:31:43 2014 +0100
+
+    moved mapbox into own module
+
+CHANGELOG.txt
+modules/getlocations_cloudmade/getlocations_cloudmade.module
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_mapbox/getlocations_mapbox.info
+modules/getlocations_mapbox/getlocations_mapbox.install
+modules/getlocations_mapbox/getlocations_mapbox.module
+
+commit d15207f
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Apr 2 15:19:30 2014 +0100
+
+    moved cloudmade to its own module
+
+CHANGELOG.txt
+modules/getlocations_cloudmade/getlocations_cloudmade.info
+modules/getlocations_cloudmade/getlocations_cloudmade.install
+modules/getlocations_cloudmade/getlocations_cloudmade.module
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 78ad5df
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Apr 2 11:38:29 2014 +0100
+
+    better country list
+
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields.min.js
+
+commit 0d98bc5
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Apr 2 11:38:06 2014 +0100
+
+    improved mapbox
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit e160921
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Apr 1 18:05:09 2014 +0100
+
+    added mapbox to leaflet
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet_providers.js
+modules/getlocations_leaflet/js/getlocations_leaflet_providers.min.js
+
+commit 3a35f99
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Mar 29 16:09:50 2014 +0000
+
+    added removelister to movemarker
+
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields.min.js
+
+commit 8a92402
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Mar 23 17:56:23 2014 +0000
+
+    leaflet css tweaks
+
+modules/getlocations_leaflet/getlocations_leaflet.css
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/views/getlocations-leaflet-view-map.tpl.php
+
+commit 2ff5bf2
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Mar 23 12:32:38 2014 +0000
+
+    added theme for getlocations search page
+
+modules/getlocations_search/getlocations_search.module
+
+commit f27d9ec
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Mar 23 11:49:03 2014 +0000
+
+    added div wrapper to getlocations_search
+
+modules/getlocations_search/getlocations_search.module
+
+commit a22b717
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Mar 22 19:15:16 2014 +0000
+
+    added show_maplinks to leaflet
+
+modules/getlocations_leaflet/getlocations_leaflet.css
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+
+commit 0903616
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Mar 22 11:40:08 2014 +0000
+
+    fixed $lid in leaflet
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 07cb98e
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Mar 21 17:52:48 2014 +0000
+
+    more info in README
+
+modules/getlocations_fields/README.txt
+
+commit 29a6ee4
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Mar 21 16:02:39 2014 +0000
+
+    more fixes for getlocations_search
+
+modules/getlocations_search/getlocations_search.module
+
+commit 747d9bc
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Mar 21 15:34:54 2014 +0000
+
+    notice avoidance
+
+getlocations.module
+
+commit 2f5c4dc
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Mar 21 11:41:15 2014 +0000
+
+    more fixes for getlocations_search
+
+modules/getlocations_search/getlocations_search.module
+
+commit b2b3c8f
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Mar 21 11:04:38 2014 +0000
+
+    fixed notices when using getlocations_search with geofields
+
+modules/getlocations_search/getlocations_search.module
+
+commit fc78e3a
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Mar 20 20:32:26 2014 +0000
+
+    updated README
+
+README.txt
+
+commit d518969
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Mar 19 22:23:20 2014 +0000
+
+    added theme for getlocations_leaflet_display_options_form
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 2841f69
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Mar 16 08:52:42 2014 +0000
+
+    fixed leaflet even_empty bug
+
+CHANGELOG.txt
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/views/getlocations_leaflet.views.inc
+modules/getlocations_leaflet/views/getlocations_leaflet_plugin_style.inc
+
+commit dbd2cc5
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Mar 14 23:23:54 2014 +0000
+
+    added more empty_result code
+
+modules/getlocations_leaflet/views/getlocations_leaflet_plugin_style.inc
+
+commit 92e9c93
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Mar 14 17:05:15 2014 +0000
+
+    re-added getlocations_fields_column_check() to entity and search
+
+modules/getlocations_fields_entity/getlocations_fields_entity.module
+modules/getlocations_search/getlocations_search.module
+
+commit 5bb4bc6
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Mar 13 22:56:44 2014 +0000
+
+    added geocoder to summary
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 92fb360
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Mar 13 16:55:32 2014 +0000
+
+    added external access to geocoder
+
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/plugins/geocoder/README.txt
+
+commit 10cb4bf
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Mar 13 10:06:36 2014 +0000
+
+    added geocoder to leaflet
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.min.js
+modules/getlocations_leaflet/plugins/geocoder/Control.Geocoder.css
+modules/getlocations_leaflet/plugins/geocoder/Control.Geocoder.js
+modules/getlocations_leaflet/plugins/geocoder/Control.Geocoder.min.css
+modules/getlocations_leaflet/plugins/geocoder/Control.Geocoder.min.js
+modules/getlocations_leaflet/plugins/geocoder/images/geocoder.png
+modules/getlocations_leaflet/plugins/geocoder/images/throbber.gif
+
+commit 765ff47
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Mar 12 10:47:07 2014 +0000
+
+    added configure key to info files
+
+CHANGELOG.txt
+getlocations.info
+modules/getlocations_fields/getlocations_fields.info
+modules/getlocations_leaflet/getlocations_leaflet.info
+modules/getlocations_search/getlocations_search.info
+
+commit 7114e40
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Mar 10 22:41:50 2014 +0000
+
+    cleanup
+
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+
+commit cb2ac16
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Mar 10 18:05:56 2014 +0000
+
+    added search views js to paths
+
+modules/getlocations_fields/getlocations_fields.admin.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+
+commit 5eb6d2c
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Mar 10 16:59:09 2014 +0000
+
+    added minified js
+
+modules/getlocations_fields/js/getlocations_fields_search_views.min.js
+
+commit 45ef42e
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Mar 10 14:29:50 2014 +0000
+
+    fixed path in install
+
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_leaflet/getlocations_leaflet.install
+modules/getlocations_search/getlocations_search.install
+
+commit ccb51e9
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Mar 9 23:32:36 2014 +0000
+
+    added geocode and reset buttons to getlocations_search
+
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+modules/getlocations_search/js/getlocations_search.min.js
+
+commit a3358af
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Mar 6 12:26:52 2014 +0000
+
+    updated getlocations_fields README
+
+modules/getlocations_fields/README.txt
+
+commit 91b7088
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Mar 5 20:22:43 2014 +0000
+
+    added Google autocomplete to distance filter
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+modules/getlocations_fields/js/getlocations_fields_search_views.js
+modules/getlocations_fields/views/getlocations_fields.views.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+views/getlocations_plugin_style_map.inc
+
+commit 594b736
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Mar 4 21:35:57 2014 +0000
+
+    fixed bug #2210537
+
+CHANGELOG.txt
+modules/getlocations_fields/getlocations_fields.module
+
+commit f0b4402
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Mar 3 09:32:22 2014 +0000
+
+    use base_path() instead of url() in image paths
+
+modules/getlocations_search/getlocations_search.module
+
+commit b7052a8
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Mar 1 15:48:36 2014 +0000
+
+    fixed issue #2208085
+
+modules/getlocations_search/getlocations_search.module
+
+commit abe43d0
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Fri Feb 28 11:59:00 2014 +0000
 
     fixed bug #2206503
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.install
 modules/getlocations_fields/getlocations_fields.module
 

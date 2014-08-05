@@ -380,6 +380,16 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     t('Show all the available locations on the map.')
   );
 
+  $form[$varname]['geocode_button_enable'] = getlocations_element_map_checkbox(
+    t('Enable Geocode button'),
+    $defaults['geocode_button_enable'],
+    t('Works with Google Autocomplete.')
+  );
+  $form[$varname]['reset_button_enable'] = getlocations_element_map_checkbox(
+    t('Enable Reset button'),
+    $defaults['reset_button_enable']
+  );
+
   $form[$varname] += getlocations_map_display_basics_form($defaults);
 
   $form[$varname] += getlocations_map_display_options_form($defaults, FALSE, TRUE, 'getlocations_search');
@@ -437,7 +447,7 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     t('Use Cluster manager. Switching this off will use no manager.')
   );
 
-  if (file_exists(GETLOCATIONS_PATH . '/getlocations.markerclusterer_override.inc')) {
+  if (file_exists(GETLOCATIONS_PATH . '/getlocations.markercluster_override.inc')) {
     module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
   }
   else {

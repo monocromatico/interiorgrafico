@@ -339,6 +339,36 @@
         }
       });
 
+      if ($("input[id$=geocoder]").attr('checked')) {
+       $("#wrap-getlocations-geocoder").show();
+      }
+      else {
+        $("#wrap-getlocations-geocoder").hide();
+      }
+      $("input[id$=geocoder]").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-geocoder").show();
+        }
+        else {
+          $("#wrap-getlocations-geocoder").hide();
+        }
+      });
+
+      if ($("input[id$=usermarker]").attr('checked')) {
+       $("#wrap-getlocations-usermarker").show();
+      }
+      else {
+        $("#wrap-getlocations-usermarker").hide();
+      }
+      $("input[id$=usermarker]").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-usermarker").show();
+        }
+        else {
+          $("#wrap-getlocations-usermarker").hide();
+        }
+      });
+
     }
   };
 }(jQuery));
