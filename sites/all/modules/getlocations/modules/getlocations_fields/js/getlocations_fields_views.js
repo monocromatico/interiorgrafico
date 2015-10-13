@@ -1,5 +1,6 @@
 /**
- * @file getlocations_fields_views.js
+ * @file
+ * getlocations_fields_views.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -64,4 +65,4 @@
     }
   };
 
-}(jQuery));
+})(jQuery);

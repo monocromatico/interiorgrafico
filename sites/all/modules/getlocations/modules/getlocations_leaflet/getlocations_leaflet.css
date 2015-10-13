@@ -1,5 +1,6 @@
 /**
- * @file getlocations_leaflet.css
+ * @file
+ * getlocations_leaflet.css
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -48,4 +49,15 @@
   margin-left: 0px;
 }
 .getlocations_leaflet_map_buttons {
+}
+.getlocations_w3w_throbber {
+  background-image: url('/misc/throbber.gif');
+  background-position: 100% 2px;
+  background-repeat: repeat-y;
+}
+.getlocations_w3w_throbber_active {
+  background-position: 100% -18px;
+}
+.getlocations_w3w_throbber_inactive {
+  background-position: 100% 2px;
 }

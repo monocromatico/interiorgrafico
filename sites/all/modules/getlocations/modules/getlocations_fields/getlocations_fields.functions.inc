@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_fields.functions.inc
+ * @file
+ * getlocations_fields.functions.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -33,6 +34,9 @@ function getlocations_fields_element_origin($default, $distance=FALSE) {
   }
   if ($distance) {
     $options += array('distance_arg' => t("Lat/Lon from views argument"));
+  }
+  if (module_exists('getlocations_gps')) {
+    $options += array('gps' => t("Lat/Lon from Getlocations GPS"));
   }
   $options += array(
     'user' => t("User's Lat/Lon (blank if unset)"),
@@ -531,4 +535,307 @@ function getlocations_fields_smart_ip_get() {
     }
   }
   return $location;
+}
+
+/**
+ * Provides a form for congfiguring search marker
+ * @param array $defaults
+ *
+ * @return
+ *   Returns form
+ *
+ */
+function getlocations_fields_views_search_form($defaults, $map_type = '') {
+
+  $form = array();
+    // show_search_distance
+    $form['show_search_distance'] = getlocations_element_map_checkbox(
+      t('Show search distance'),
+      $defaults['show_search_distance'],
+      t('Show search distance from origin where relevant. Applies to Views using a distance filter.')
+    );
+    $form['views_search_center'] = getlocations_element_map_checkbox(
+      t('Center map on search'),
+      $defaults['views_search_center'],
+      t('Place the search result location in the middle of the map. Applies to Views using a distance filter.')
+    );
+
+    // views_search_marker
+    $form['views_search_marker_enable'] = getlocations_element_map_checkbox(
+      t('Mark the search center on the map'),
+      $defaults['views_search_marker_enable'],
+      t('Show search marker on origin where relevant. Applies to Views using a distance filter.')
+    );
+    $form['views_search_marker_enable']['#suffix'] = '<div id="wrap-getlocations-views-search-marker">';
+
+    if ($map_type == 'leaflet') {
+      // TODO TEST THIS
+      if ($defaults['awesome'] && $defaults['marker_type'] == 'fa') {
+        $labels = array(
+          'awesome_icon' => t('Search Awesome icon'),
+          'awesome_icon_color' => t('Search Awesome icon color'),
+          'awesome_marker_color' => t('Search Awesome marker color'),
+          'awesome_title' => t('Search Awesome Fonts icon settings'),
+          'awesome_icon_spin' => t('Search Awesome icon spin'),
+          'awesome_icon_size' => t('Search Awesome icon size'),
+          'awesome_icon_type' => t('Search Awesome icon type'),
+          'awesome_icon_flip' => t('Search Awesome icon flip and rotate'),
+          'awesome_icon_html' => t('Search Awesome icon HTML'),
+          'awesome_icon_class' => t('Search Awesome icon class'),
+        );
+        $prefix = 'search';
+        $form += getlocations_leaflet_awesome_markers_elements_get($defaults, $labels, $prefix);
+      }
+      else {
+        // getlocations markers
+        $markers = getlocations_get_marker_titles();
+        $form['views_search_marker'] = getlocations_element_map_marker(
+          t('Search Map marker'),
+          $markers,
+          $defaults['views_search_marker'],
+          ''
+        );
+      }
+    }
+    else {
+      $markers = getlocations_get_marker_titles();
+      $form['views_search_marker'] = getlocations_element_map_marker(
+        t('Search Map marker'),
+        $markers,
+        $defaults['views_search_marker'],
+        ''
+      );
+    }
+
+    $form['views_search_marker_toggle'] = getlocations_element_map_checkbox(
+      t('Enable Search Marker toggle button'),
+      $defaults['views_search_marker_toggle'],
+      t('Show a button to switch visibility on or off.')
+    );
+    $form['views_search_marker_toggle_active'] = getlocations_element_map_checkbox(
+      t('Initial state of Search Marker'),
+      $defaults['views_search_marker_toggle_active'],
+      t('Set initial visibility on.')
+    );
+    $form['views_search_marker_toggle_active']['#suffix'] = '</div>';
+
+    if ($map_type !== 'mapquest') {
+      // search area shape
+      $form['views_search_radshape_enable'] = getlocations_element_map_checkbox(
+        t('Enable Show search area'),
+        $defaults['views_search_radshape_enable'],
+        t('Show Search area as a rectangle or circle. Applies to Views using a distance filter.')
+      );
+      $form['views_search_radshape_enable']['#suffix'] = '<div id="wrap-getlocations-views-search-radshape">';
+
+      // jquery_colorpicker
+      if (module_exists('jquery_colorpicker') && $defaults['jquery_colorpicker_enabled']) {
+        $form['views_search_radshape_strokecolor'] = array(
+          '#type' => 'jquery_colorpicker',
+          '#title' => t('Search area line color'),
+          '#default_value' => preg_replace("/^#/", '', $defaults['views_search_radshape_strokecolor']),
+          '#description' => t('Click on the Colorpicker icon to select a color'),
+        );
+      }
+      else {
+        $form['views_search_radshape_strokecolor'] = getlocations_element_map_tf(
+          t('Search area line color'),
+          $defaults['views_search_radshape_strokecolor'],
+          t('HTML hex, eg #FF0000.'),
+          10,
+          10,
+          TRUE
+        );
+      }
+
+      $form['views_search_radshape_strokeopacity'] = getlocations_element_map_tf(
+        t('Search area line opacity'),
+        $defaults['views_search_radshape_strokeopacity'],
+        t('Must be between 0 and 1.'),
+        10,
+        10,
+        TRUE
+      );
+      $form['views_search_radshape_strokeweight'] = getlocations_element_map_tf(
+        t('Search area line thickness'),
+        $defaults['views_search_radshape_strokeweight'],
+        t('Must be an integer.'),
+        10,
+        10,
+        TRUE
+      );
+
+      // jquery_colorpicker
+      if (module_exists('jquery_colorpicker') && $defaults['jquery_colorpicker_enabled']) {
+        $form['views_search_radshape_fillcolor'] = array(
+          '#type' => 'jquery_colorpicker',
+          '#title' => t('Search area fill color'),
+          '#default_value' => preg_replace("/^#/", '', $defaults['views_search_radshape_fillcolor']),
+          '#description' => t('Click on the Colorpicker icon to select a color'),
+        );
+      }
+      else {
+        $form['views_search_radshape_fillcolor'] = getlocations_element_map_tf(
+          t('Search area fill color'),
+          $defaults['views_search_radshape_fillcolor'],
+          t('HTML hex, eg #FF0000.'),
+          10,
+          10,
+          TRUE
+        );
+      }
+
+      $form['views_search_radshape_fillopacity'] = getlocations_element_map_tf(
+        t('Search area fill opacity'),
+        $defaults['views_search_radshape_fillopacity'],
+        t('Must be between 0 and 1.'),
+        10,
+        10,
+        TRUE
+      );
+      $form['views_search_radshape_toggle'] = getlocations_element_map_checkbox(
+        t('Enable Search area toggle button'),
+        $defaults['views_search_radshape_toggle'],
+        t('Show a button to switch visibility on or off.')
+      );
+      $form['views_search_radshape_toggle_active'] = getlocations_element_map_checkbox(
+        t('Initial state of Search area'),
+        $defaults['views_search_radshape_toggle_active'],
+        t('Set initial visibility on.')
+      );
+      $form['views_search_radshape_toggle_active']['#suffix'] = '</div>';
+
+    }
+
+
+  return $form;
+}
+
+/**
+ * Implements hook_token_info().
+ * derived from location_cck module
+ */
+function getlocations_fields_token_info() {
+  $module = 'getlocations_fields';
+  $supported_entities = getlocations_get_supported_entities($module);
+  $columns = getlocations_fields_columns();
+  $info = array();
+  $fields = field_info_field_map();
+  // Loop over the entities and fields and setup tokens.
+  foreach ($fields as $field_key => $field_value) {
+    if ($field_value['type'] == $module) {
+      foreach ($supported_entities AS $entity) {
+        $info['types'][$field_key] = array(
+          'name' => t('GetLocations fields: !field', array('!field' => $field_key)),
+          'description' => t('Tokens for the field: !field. Replace the "?" with the delta you want. Defaults to delta 0..', array('!field' => $field_key)),
+          'needs-data' => $entity,
+        );
+        $info['tokens'][$entity][$field_key] = array(
+          'name' => t('GetLocations field: !field', array('!field' => $field_key)),
+          'description' => t('Tokens for the field: !field. Replace the "?" with the delta you want. Defaults to delta 0.', array('!field' => $field_key)),
+          'type' => $field_key,
+        );
+      }
+      foreach ($columns as $col_key => $col_value) {
+        $info['tokens'][$field_key][$col_key . ":?"] = array(
+          'name' => t($col_value),
+          'description' => t($col_value),
+          'type' => $field_key,
+        );
+      }
+    }
+  }
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function getlocations_fields_tokens($type, $tokens, array $data = array(), array $options = array()) {
+
+  // Setup our replacements array.
+  $sanitize = ( isset($options['sanitize']) && $options['sanitize'] ? TRUE : FALSE);
+  $replacements = array();
+  $module = 'getlocations_fields';
+  $obj = FALSE;
+
+  // Make sure we have an entity.
+  if (isset($data['entity_type']) && isset($data['entity'])) {
+
+    $obj = $data['entity'];
+    $lang = (isset($obj->language) && $obj->language ? $obj->language : LANGUAGE_NONE);
+
+  }
+
+  if ($obj) {
+    // Loop through the tokens.
+    foreach ($tokens as $name => $original) {
+      // Break token into an array.
+      $pieces = explode(':', str_replace(array('[', ']'), '', $original));
+
+      // Must have entity, field, and item to be a getlocations_fields token.
+      if (count($pieces) < 3) {
+        continue;
+      }
+      if (count($pieces) > 3 && $pieces[0] == 'user' && $pieces[1] == 'original' ) {
+        $entity = $pieces[0];
+        $field = $pieces[2];
+        $item = $pieces[3];
+        $delta = (isset($pieces[4]) && is_numeric($pieces[4]) ? $pieces[4] : 0);
+      }
+      else {
+        $entity = $pieces[0];
+        $field = $pieces[1];
+        $item = $pieces[2];
+        $delta = (isset($pieces[3]) && is_numeric($pieces[3]) ? $pieces[3] : 0);
+      }
+
+      $field_info = field_info_field($field);
+      $supported_entities = getlocations_get_supported_entities($module);
+      if ($entity == 'current-user') {
+        $supported_entities[] = 'current-user';
+      }
+      $fieldnames = getlocations_get_fieldnames();
+      $col_keys = getlocations_fields_columns(TRUE);
+      // Make sure this is a field and it is a getlocations_fields field.
+      if (!isset($field_info) || (isset($field_info) && $field_info['type'] != $module)
+        || ! in_array($field, $fieldnames)
+        || ! in_array($item, $col_keys)
+        || ! in_array($entity, $supported_entities)
+        ) {
+        continue;
+      }
+      $content = (isset($obj->{$field}[$lang][$delta][$item]) ? $obj->{$field}[$lang][$delta][$item] : '');
+      if ($content && $sanitize) {
+        $content = getlocations_apoclean($content);
+      }
+      $replacements[$original] = $content;
+    }
+  }
+
+  return $replacements;
+
+}
+
+function getlocations_fields_columns($keyonly = FALSE) {
+  $columns = array(
+    'name'         => t('Name'),
+    'street'       => t('Street'),
+    'additional'   => t('Additional'),
+    'city'         => t('City'),
+    'province'     => t('Province'),
+    'postal_code'  => t('Postal code'),
+    'latitude'     => t('Latitude'),
+    'longitude'    => t('Longitude'),
+    'country'      => t('Country'),
+    'country_name' => t('Country name'),
+    'phone'        => t('Phone'),
+    'mobile'       => t('Mobile'),
+    'fax'          => t('Fax'),
+    'marker'       => t('Marker'),
+  );
+  if ($keyonly) {
+    return array_keys($columns);
+  }
+  return $columns;
 }

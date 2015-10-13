@@ -1,6 +1,7 @@
 
 /**
- * @file getlocations_leaflet_formatter.js
+ * @file
+ * getlocations_leaflet_formatter.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -369,6 +370,140 @@
         }
       });
 
+      if ($("input[id$=bouncemarker]").attr('checked')) {
+        $("#wrap-getlocations-bouncemarker").show();
+      }
+      else {
+        $("#wrap-getlocations-bouncemarker").hide();
+      }
+      $("input[id$=bouncemarker]").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-bouncemarker").show();
+        }
+        else {
+          $("#wrap-getlocations-bouncemarker").hide();
+        }
+      });
+
+      if ($("input[id$=magnifyingglass]").attr('checked')) {
+        $("#wrap-getlocations-magnifyingglass").show();
+      }
+      else {
+        $("#wrap-getlocations-magnifyingglass").hide();
+      }
+      $("input[id$=magnifyingglass]").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-magnifyingglass").show();
+        }
+        else {
+          $("#wrap-getlocations-magnifyingglass").hide();
+        }
+      });
+
+      if ($("input[id$=terminator]").attr('checked')) {
+        $("#wrap-getlocations-terminator").show();
+      }
+      else {
+        $("#wrap-getlocations-terminator").hide();
+      }
+      $("input[id$=terminator]").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-terminator").show();
+        }
+        else {
+          $("#wrap-getlocations-terminator").hide();
+        }
+      });
+
+      if ($("input[id$=mapquest-maps-use]").attr('checked')) {
+        $("#wrap-getlocations-mapquest-maps-use").show();
+      }
+      else {
+        $("#wrap-getlocations-mapquest-maps-use").hide();
+      }
+      $("input[id$=mapquest-maps-use]").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-mapquest-maps-use").show();
+        }
+        else {
+          $("#wrap-getlocations-mapquest-maps-use").hide();
+        }
+      });
+
+      // search marker
+      if ($("#edit-getlocations-leaflet-defaults-views-search-marker-enable").is('input')) {
+        if ($("#edit-getlocations-leaflet-defaults-views-search-marker-enable").attr('checked')) {
+          $("#wrap-getlocations-views-search-marker").show();
+        }
+        else {
+          $("#wrap-getlocations-views-search-marker").hide();
+        }
+        $("#edit-getlocations-leaflet-defaults-views-search-marker-enable").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-views-search-marker").show();
+          }
+          else {
+            $("#wrap-getlocations-views-search-marker").hide();
+          }
+        });
+      }
+
+      // search area shape
+      if ($("#edit-getlocations-leaflet-defaults-views-search-radshape-enable").is('input')) {
+        if ($("#edit-getlocations-leaflet-defaults-views-search-radshape-enable").attr('checked')) {
+          $("#wrap-getlocations-views-search-radshape").show();
+        }
+        else {
+          $("#wrap-getlocations-views-search-radshape").hide();
+        }
+        $("#edit-getlocations-leaflet-defaults-views-search-radshape-enable").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-views-search-radshape").show();
+          }
+          else {
+            $("#wrap-getlocations-views-search-radshape").hide();
+          }
+        });
+      }
+      //edit-getlocations-default-show-maplinks-viewport
+      if ($("#edit-getlocations-leaflet-defaults-show-maplinks").is('input')) {
+        if ($("#edit-getlocations-leaflet-defaults-show-maplinks").attr('checked')) {
+          $("#wrap-getlocations-maplinks").show();
+        }
+        else {
+          $("#wrap-getlocations-maplinks").hide();
+        }
+        $("#edit-getlocations-leaflet-defaults-show-maplinks").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-maplinks").show();
+          }
+          else {
+            $("#wrap-getlocations-maplinks").hide();
+          }
+        });
+      }
+
+      // #edit-getlocations-leaflet-defaults-what3words-enable
+      // What3Words #edit-getlocations-leaflet-default-what3words-enable
+      if ($("#edit-getlocations-leaflet-defaults-what3words-enable").is('input')) {
+        if ($("#edit-getlocations-leaflet-defaults-what3words-enable").attr('checked')) {
+          $("#wrap-getlocations-what3words").show();
+        }
+        else {
+          $("#wrap-getlocations-what3words").hide();
+        }
+        $("#edit-getlocations-leaflet-defaults-what3words-enable").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-what3words").show();
+          }
+          else {
+            $("#wrap-getlocations-what3words").hide();
+          }
+        });
+      }
+
+
+
     }
   };
-}(jQuery));
+})(jQuery);

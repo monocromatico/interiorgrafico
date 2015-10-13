@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations.markercluster.inc
+ * @file
+ * getlocations.markercluster.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -16,13 +17,18 @@
 
 function getlocations_get_markerclusterer_styles() {
 
-  $base_path = base_path();
-  $jspath = $base_path . GETLOCATIONS_PATH . '/js/';
+  $getlocations_defaults = getlocations_defaults();
+  if (! empty($getlocations_defaults['markerclusterer_imgpath'])) {
+    $jspath = $getlocations_defaults['markerclusterer_imgpath'];
+  }
+  else {
+    $jspath = base_path() . GETLOCATIONS_PATH . '/js/images';
+  }
 
   $markerclusterer_styles = array(
     array(
       (object) array(
-        'url' => $jspath . 'images/people35.png',
+        'url' => $jspath . '/people35.png',
         'height' => 35,
         'width' => 35,
         'anchor' => array(16, 0),
@@ -30,7 +36,7 @@ function getlocations_get_markerclusterer_styles() {
         'textSize' => 10
       ),
       (object) array(
-        'url' => $jspath . 'images/people45.png',
+        'url' => $jspath . '/people45.png',
         'height' => 45,
         'width' => 45,
         'anchor' => array(24, 0),
@@ -38,7 +44,7 @@ function getlocations_get_markerclusterer_styles() {
         'textSize' => 11
       ),
       (object) array(
-        'url' => $jspath . 'images/people55.png',
+        'url' => $jspath . '/people55.png',
         'height' => 55,
         'width' => 55,
         'anchor' => array(32, 0),
@@ -48,7 +54,7 @@ function getlocations_get_markerclusterer_styles() {
     ),
     array(
       (object) array(
-        'url' => $jspath . 'images/conv30.png',
+        'url' => $jspath . '/conv30.png',
         'height' => 27,
         'width' => 30,
         'anchor' => array(3, 0),
@@ -56,7 +62,7 @@ function getlocations_get_markerclusterer_styles() {
         'textSize' => 10
       ),
       (object) array(
-        'url' => $jspath . 'images/conv40.png',
+        'url' => $jspath . '/conv40.png',
         'height' => 36,
         'width' => 40,
         'anchor' => array(6, 0),
@@ -64,7 +70,7 @@ function getlocations_get_markerclusterer_styles() {
         'textSize' => 11
       ),
       (object) array(
-        'url' => $jspath . 'images/conv50.png',
+        'url' => $jspath . '/conv50.png',
         'height' => 45,
         'width' => 50,
         'anchor' => array(8, 0),
@@ -74,7 +80,7 @@ function getlocations_get_markerclusterer_styles() {
     ),
     array(
       (object) array(
-        'url' => $jspath . 'images/heart30.png',
+        'url' => $jspath . '/heart30.png',
         'height' => 26,
         'width' => 30,
         'anchor' => array(4, 0),
@@ -82,7 +88,7 @@ function getlocations_get_markerclusterer_styles() {
         'textSize' => 10
       ),
       (object) array(
-        'url' => $jspath . 'images/heart40.png',
+        'url' => $jspath . '/heart40.png',
         'height' => 35,
         'width' => 40,
         'anchor' => array(8, 0),
@@ -90,7 +96,7 @@ function getlocations_get_markerclusterer_styles() {
         'textSize' => 11
       ),
       (object) array(
-        'url' => $jspath . 'images/heart50.png',
+        'url' => $jspath . '/heart50.png',
         'height' => 44,
         'width' => 50,
         'anchor' => array(12, 0),

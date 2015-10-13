@@ -1,6 +1,7 @@
 
 /**
- * @file getlocations_admin.js
+ * @file
+ * getlocations_admin.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -544,9 +545,79 @@
         });
       }
 
+      // search marker
+      if ($("#edit-getlocations-default-views-search-marker-enable").is('input')) {
+        if ($("#edit-getlocations-default-views-search-marker-enable").attr('checked')) {
+          $("#wrap-getlocations-views-search-marker").show();
+        }
+        else {
+          $("#wrap-getlocations-views-search-marker").hide();
+        }
+        $("#edit-getlocations-default-views-search-marker-enable").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-views-search-marker").show();
+          }
+          else {
+            $("#wrap-getlocations-views-search-marker").hide();
+          }
+        });
+      }
 
+      // search area shape
+      if ($("#edit-getlocations-default-views-search-radshape-enable").is('input')) {
+        if ($("#edit-getlocations-default-views-search-radshape-enable").attr('checked')) {
+          $("#wrap-getlocations-views-search-radshape").show();
+        }
+        else {
+          $("#wrap-getlocations-views-search-radshape").hide();
+        }
+        $("#edit-getlocations-default-views-search-radshape-enable").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-views-search-radshape").show();
+          }
+          else {
+            $("#wrap-getlocations-views-search-radshape").hide();
+          }
+        });
+      }
+
+      //edit-getlocations-default-show-maplinks-viewport
+      if ($("#edit-getlocations-default-show-maplinks").is('input')) {
+        if ($("#edit-getlocations-default-show-maplinks").attr('checked')) {
+          $("#wrap-getlocations-maplinks").show();
+        }
+        else {
+          $("#wrap-getlocations-maplinks").hide();
+        }
+        $("#edit-getlocations-default-show-maplinks").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-maplinks").show();
+          }
+          else {
+            $("#wrap-getlocations-maplinks").hide();
+          }
+        });
+      }
+
+      // What3Words #edit-getlocations-default-what3words-enable
+      if ($("#edit-getlocations-default-what3words-enable").is('input')) {
+        if ($("#edit-getlocations-default-what3words-enable").attr('checked')) {
+          $("#wrap-getlocations-what3words").show();
+        }
+        else {
+          $("#wrap-getlocations-what3words").hide();
+        }
+        $("#edit-getlocations-default-what3words-enable").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-what3words").show();
+          }
+          else {
+            $("#wrap-getlocations-what3words").hide();
+          }
+        });
+      }
 
     }
   };
 
-}(jQuery));
+})(jQuery);

@@ -1,6 +1,7 @@
 
 /**
- * @file getlocations_fields_formatter.js
+ * @file
+ * getlocations_fields_formatter.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -356,6 +357,45 @@
         }
       });
 
+      // search marker
+      if ($("input[id$=views-search-marker-enable]").is('input')) {
+        if ( $("input[id$=views-search-marker-enable]").attr('checked')) {
+          $("#wrap-getlocations-views-search-marker").show();
+        }
+        else {
+          $("#wrap-getlocations-views-search-marker").hide();
+        }
+        $("input[id$=views-search-marker-enable]").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-views-search-marker").show();
+          }
+          else {
+            $("#wrap-getlocations-views-search-marker").hide();
+          }
+        });
+      }
+
+      // search area shape
+      if ($("input[id$=views-search-radshape-enable]").is('input')) {
+        if ($("input[id$=views-search-radshape-enable]").attr('checked')) {
+          $("#wrap-getlocations-views-search-radshape").show();
+        }
+        else {
+          $("#wrap-getlocations-views-search-radshape").hide();
+        }
+        $("input[id$=views-search-radshape-enable]").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-views-search-radshape").show();
+          }
+          else {
+            $("#wrap-getlocations-views-search-radshape").hide();
+          }
+        });
+      }
+////////
+
+
+////////
     }
   };
-}(jQuery));
+})(jQuery);

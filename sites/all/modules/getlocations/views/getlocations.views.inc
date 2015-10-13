@@ -95,8 +95,8 @@ function template_preprocess_getlocations_view_map(&$variables) {
         if ($entity_type == 'node') {
           $marker = $options['node_map_marker'];
           if (isset($location['type']) && isset($location['field_name']) ) {
-            if (isset($options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']])) {
-              $marker = $options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']];
+            if (isset($options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']])) {
+              $marker = $options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']];
             }
           }
           // term marker
@@ -204,6 +204,11 @@ function template_preprocess_getlocations_view_map(&$variables) {
   }
 
   getlocations_js_settings_do($newdefaults, $latlons, $minmaxes, $mapid);
+
+  // show_search_distance
+  if (isset($variables['view']->exposed_data['distance']) && isset($variables['view']->exposed_data['distance']['latitude']) && $variables['view']->exposed_data['distance']['latitude'] && isset($variables['view']->exposed_data['distance']['longitude']) && $variables['view']->exposed_data['distance']['longitude'] && $variables['view']->exposed_data['distance']['search_distance']) {
+    $newdefaults['search_dist_info'] = $variables['view']->exposed_data['distance'];
+  }
 
   $variables['map']  = theme('getlocations_show', array('width' => $newdefaults['width'], 'height' => $newdefaults['height'], 'defaults' => $newdefaults, 'mapid' => $mapid, 'latlons' => $latlons, 'minmaxes' => $minmaxes, 'type' => '', 'node' => ''));
 

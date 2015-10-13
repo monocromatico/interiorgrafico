@@ -1,4 +1,7 @@
 for Drupal 7
+
+Getlocations 1.x
+
 Getlocations will provide a Google maps API version 3 enabled map on which to
 display markers of locations found in location-enabled content-types.
 
@@ -7,12 +10,26 @@ Before installing getlocations please ensure that you have the libraries module 
 
 You can fetch markers from dropbox:
 As tarballs:
-http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers.tar.gz (required)
-http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers.tar.gz (required)
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-various.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-various-small.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-restaurants-bars.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-hairlines.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-circular.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-micons.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-paddle.tar.gz
 
-As zipfles:
-http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers.zip (required)
-http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.zip
+As zipfiles:
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers.zip (required)
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.zip
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-various.zip
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-various-small.zip
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-restaurants-bars.zip
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-hairlines.zip
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-circular.zip
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-micons.zip
+https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-paddle.zip
 
 Download the file(s) and place them into your libraries folder so you have
 a path something like this:
@@ -154,7 +171,7 @@ Content: Title
 Content: Nid (make sure this has 'Rewrite the output of this field' and 'Output this field as a link' switched off)
 latitude
 longitude
-Content: Type
+Content: Type (set to Output machine name)
 
 They should be in that order.
 exclude all from display except Content: Nid
@@ -297,8 +314,28 @@ sites/all/libraries/GeoJSON/GeoJSON.js
 
 Once the library is installed you can enable it globally, per view or per content type
 
+Geocoder-js
+The geocoder-js library provides support for the search facilities from Openstreetmap
+You can download the library from https://github.com/geocoder-php/geocoder-js.
+You should copy the file from dist/geocoder.min.js to sites/all/libraries/geocoder-js/geocoder.min.js
+
+Once the library is installed you can enable it globally, per content type or in getlocations_search.
+
 Drush integration for getlocations.
 'drush getlocations-markers' will install the basic getlocations marker set
 'drush getlocations-geojson' will install the GeoJSON javascript library
+'drush getlocations-geocoder' will install the Geocoder-js javascript library
+'drush getlocations-leaflet'  will install the Leaflet javascript library
 If you want the library installed somewhere other than sites/all/libraries then provide the path after the command.
+
+Other map tiles.
+Getlocations supports the use of other sources of maps besides Google, you can show maps from OpenStreetMap, OpenCycleMap, Stamen and Esri.
+Developers can add their own maps using hook_getlocations_map_providers(), see the function getlocations_getlocations_map_providers() for examples.
+
+The Google Places Search service can be enabled for any map. It can be configured to provide an Autocomplete textfield or a dropdown.
+If you want to preselect a particular item in the dropdown you can add something like this to your theme's javascript:
+
+var key = 'key_1';
+var tp = 'grocery_or_supermarket';
+$("#search_places_select_" + key).val(tp);
 

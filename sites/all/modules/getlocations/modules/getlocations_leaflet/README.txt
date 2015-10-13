@@ -3,13 +3,17 @@ getlocations_leaflet module for Drupal 7.x
 If you have any questions or suggestions please contact me at
 http://drupal.org/user/52366 or use the Getlocations issue queue.
 
-Leaflet from
-http://leaflet-cdn.s3.amazonaws.com/build/leaflet-0.7.2.zip
+Leaflet Library from
+http://leaflet-cdn.s3.amazonaws.com/build/leaflet-0.7.3.zip
 Extract it to your drupal root /sites/all/libraries/leaflet.
 The file 'leaflet.js' must be found at /sites/all/libraries/leaflet/leaflet.js.
 All other files and folder(s) that come with the library are also needed there.
 You can install it using drush:
 drush getlocations-leaflet
+
+Alternately you can use CDN, see http://leafletjs.com/ or https://cdnjs.com/libraries/leaflet for details.
+You can add the css and js URLs on the Leaflet configuration page.
+
 
 markercluster comes from
 https://github.com/Leaflet/Leaflet.markercluster
@@ -109,4 +113,13 @@ http://brunob.github.com/leaflet.fullscreen
 https://github.com/turban/Leaflet.Sync
 https://github.com/Norkart/Leaflet-MiniMap
 https://github.com/ardhi/Leaflet.MousePosition
+
+Leaflet DivIcons
+
+Leaflet's DivIcon function can be used by doing the following:
+Enable Awesome markers.
+Select awesome markers as the marker type
+Select "Icon only" and add your html and/or class to the provided textfields
+an example html:<div class="divicon-test1">&nbsp;</div>
+ensure that your bespoke css class is in your theme's css and it should work.
 

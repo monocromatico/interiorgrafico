@@ -1,6 +1,7 @@
 
 /**
- * @file getlocations_box.js
+ * @file
+ * getlocations_box.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -16,4 +17,4 @@
     }
   };
 
-}(jQuery));
+})(jQuery);

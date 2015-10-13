@@ -1,6 +1,7 @@
 
 /**
- * @file getlocations_leaflet_rectangles.js
+ * @file
+ * getlocations_leaflet_rectangles.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -109,13 +110,13 @@
         }
 
         if (rectangles.length) {
-          Rect.addTo(getlocations_leaflet_map[key]);
-          if (getlocations_leaflet_settings[key].map_settings.layercontrol_rect_ov) {
-            getlocations_leaflet_layerscontrol[key].addOverlay(Rect, getlocations_leaflet_settings[key].map_settings.layercontrol_rect_ov_label);
+          Rect.addTo(Drupal.getlocations_leaflet_map[key]);
+          if (Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_rect_ov) {
+            Drupal.getlocations_leaflet_layerscontrol[key].addOverlay(Rect, Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_rect_ov_label);
           }
         }
 
       });
     }
   };
-}(jQuery));
+})(jQuery);

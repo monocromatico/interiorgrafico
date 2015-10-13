@@ -1,6 +1,7 @@
 
 /**
- * @file getlocations_leaflet_circles.js
+ * @file
+ * getlocations_leaflet_circles.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -110,13 +111,13 @@
         }
 
         if (circles.length) {
-          Circles.addTo(getlocations_leaflet_map[key]);
-          if (getlocations_leaflet_settings[key].map_settings.layercontrol_circ_ov) {
-            getlocations_leaflet_layerscontrol[key].addOverlay(Circles, getlocations_leaflet_settings[key].map_settings.layercontrol_circ_ov_label);
+          Circles.addTo(Drupal.getlocations_leaflet_map[key]);
+          if (Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_circ_ov) {
+            Drupal.getlocations_leaflet_layerscontrol[key].addOverlay(Circles, Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_circ_ov_label);
           }
         }
 
       });
     }
   };
-}(jQuery));
+})(jQuery);

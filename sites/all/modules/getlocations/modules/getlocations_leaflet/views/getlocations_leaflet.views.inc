@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_leaflet.views.inc
+ * @file
+ * getlocations_leaflet.views.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -69,6 +70,21 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
   else {
     $custom_content_source = NULL;
   }
+
+  $map_settings = getlocations_leaflet_map_get_info('Getlocations OSM');
+  $map_settings = getlocations_leaflet_get_map_layers($map_settings);
+  // show_search_distance
+  if (
+    isset($variables['view']->exposed_data['distance'])
+    && isset($variables['view']->exposed_data['distance']['latitude'])
+    && $variables['view']->exposed_data['distance']['latitude']
+    && isset($variables['view']->exposed_data['distance']['longitude'])
+    && $variables['view']->exposed_data['distance']['longitude']
+    && $variables['view']->exposed_data['distance']['search_distance']
+  ) {
+    $map_settings['search_dist_info'] = $variables['view']->exposed_data['distance'];
+  }
+
   if (count($locations)) {
     $cats = array();
     // we should loop over them and dump bummers with no lat/lon
@@ -108,7 +124,7 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
             $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
             if ($getlocations_node_marker['enable']) {
               if (isset($location['type']) && isset($location['field_name'])) {
-                $mkey = 'node_marker__' . strtolower($location['type']) . '__' . $location['field_name'];
+                $mkey = 'node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name'];
                 $vicon = getlocations_leaflet_awesome_marker_get($options, $mkey);
                 $per_field_markers = TRUE;
               }
@@ -136,8 +152,8 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
           if ($entity_type == 'node') {
             $marker = $options['node_map_marker'];
             if (isset($location['type']) && isset($location['field_name']) ) {
-              if (isset($options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']])) {
-                $marker = $options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']];
+              if (isset($options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']])) {
+                $marker = $options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']];
               }
             }
             // term marker
@@ -229,7 +245,10 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
             if (isset($options['getdirections_link'])) {
               $extra['gdlink'] = $options['getdirections_link'];
             }
-
+            // 'show_search_distance'
+            if ($options['show_search_distance'] && isset($map_settings['search_dist_info']) ) {
+              $extra['sdist'] = (isset($map_settings['search_dist_info']['search_units']) ? $map_settings['search_dist_info']['search_units'] : '') . '|' . $map_settings['search_dist_info']['latitude'] . '|' . $map_settings['search_dist_info']['longitude'];
+            }
             $markeraction = array('type' => 'popup', 'data' => ($custom_content ? $custom_content : getlocations_getinfo($lid, $base_field, $extra)));
           }
           elseif ($options['markeraction'] == 'link') {
@@ -241,7 +260,6 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
 
           $iconlist[$marker] = getlocations_leaflet_get_marker($marker);
 
-          #$latlons[$ct] = array($location['latitude'], $location['longitude'], $base_field, 0, $lid, $title, $marker, $markeraction, $cat);
           $latlons[$ct] = array($location['latitude'], $location['longitude'], $base_field, 0, $lid, $title, $marker, $vector, $markeraction, $cat);
 
           // special case for ajax, a custom content field containing the key of the map associated with an exposed form
@@ -261,8 +279,6 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
     $minmaxes = '';
   }
 
-  $map_settings = getlocations_leaflet_map_get_info('Getlocations OSM');
-  $map_settings = getlocations_leaflet_get_map_layers($map_settings);
   if (! empty($options['baselayers'])) {
     $map_layers = array();
     foreach ($options['baselayers'] AS $k => $v) {
@@ -302,8 +318,6 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
   $map_settings['latlons'] = $latlons;
   $map_settings['map_settings']['categories'] = $cats;
   $map_settings['map_settings']['category_showhide_buttons'] = $options['category_showhide_buttons'];
-
-  drupal_add_library('getlocations_leaflet', 'getlocations-leaflet');
 
   $variables['map'] = theme('getlocations_leaflet_map', array(
     'width' => $options['width'],

@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_search.admin.inc
+ * @file
+ * getlocations_search.admin.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -335,11 +336,14 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     $defaults['display_dms'],
     ''
   );
-  $form[$varname]['display_geo_microformat'] = getlocations_element_map_checkbox(
-    t('Show Latitude/Longitude in accordance with Geo Microformat markup'),
+
+  $form[$varname]['display_geo_microformat'] = getlocations_element_dd(
+    t('Show Latitude/Longitude in accordance with Geo Microformat or Microdata markup'),
     $defaults['display_geo_microformat'],
-    t('See the <a href="@a" target="_blank">Microformats wiki</a> for more information', array('@a' => url('http://microformats.org/wiki/geo')))
+    array( 0 => t('None'), 1 => t('Microformat'), 2 => t('Microdata')),
+    t('See the <a href="@a" target="_blank">Microformats wiki</a> or <a href="@b" target="_blank">Microdata standards</a> for more information', array('@a' => url('http://microformats.org/wiki/geo'), '@b' => url('http://www.w3.org/TR/microdata/')))
   );
+
   $form[$varname]['display_accuracy'] = getlocations_element_map_checkbox(
     t('Show accuracy results'),
     $defaults['display_accuracy'],
@@ -394,12 +398,7 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
 
   $form[$varname] += getlocations_map_display_options_form($defaults, FALSE, TRUE, 'getlocations_search');
 
-  $form[$varname]['markeractiontype'] = getlocations_element_map_markeractiontype(
-    $defaults['markeractiontype']
-  );
-  $form[$varname]['markeraction'] = getlocations_element_map_markeraction(
-    $defaults['markeraction']
-  );
+  $form[$varname] += getlocations_markeraction_form($defaults);
 
   if (module_exists('getdirections')) {
     $form[$varname]['getdirections_link'] = getlocations_element_map_checkbox(
@@ -422,51 +421,14 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
   );
   $form[$varname]['nodezoom']['#suffix'] = '</div>';
 
-  // marker manager
+  // marker managers
   $form[$varname]['markermanagertype'] = getlocations_element_markermanagertype($defaults['markermanagertype']);
-  $form[$varname]['usemarkermanager'] = getlocations_element_map_checkbox(
-    t('Use Marker manager'),
-    $defaults['usemarkermanager'],
-    t('Use Marker manager. Switching this off will use no manager.')
-  );
-  $form[$varname]['minzoom'] = getlocations_element_map_zoom(
-    t('Minimum Zoom'),
-    $defaults['minzoom'],
-    t('The Minimum zoom level at which markers will be visible.')
-  );
 
-  $form[$varname]['maxzoom'] = getlocations_element_map_zoom(
-    t('Maximum Zoom'),
-    $defaults['maxzoom'],
-    t('The Maximum zoom level at which markers will be visible.')
-  );
+  // markermanager
+  $form[$varname] += getlocations_markermanager_form($defaults);
 
-  $form[$varname]['useclustermanager'] = getlocations_element_map_checkbox(
-    t('Use Cluster manager'),
-    $defaults['useclustermanager'],
-    t('Use Cluster manager. Switching this off will use no manager.')
-  );
-
-  if (file_exists(GETLOCATIONS_PATH . '/getlocations.markercluster_override.inc')) {
-    module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
-  }
-  else {
-    module_load_include('inc', 'getlocations', 'getlocations.markercluster');
-  }
-  $form[$varname]['markerclusterer_style'] = getlocations_element_markerclusterer_style($defaults['markerclusterer_style']);
-
-  $form[$varname]['markerclusterer_title'] = getlocations_element_map_tf(
-    t('Markerclusterer tooltip'),
-    $defaults['markerclusterer_title'],
-    t('The text of a Markerclusterer tooltip'),
-    30,
-    64,
-    TRUE
-  );
-
-  $form[$varname]['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($defaults['markerclusterer_zoom']);
-  $form[$varname]['markerclusterer_size'] = getlocations_element_markerclusterer_size($defaults['markerclusterer_size']);
-  $form[$varname]['markerclusterer_minsize'] = getlocations_element_markerclusterer_minsize($defaults['markerclusterer_minsize']);
+  // markerclusterer
+  $form[$varname] += getlocations_markercluster_form($defaults);
 
   return $form;
 
@@ -546,7 +508,7 @@ function getlocations_search_settings_validate($form, &$form_state) {
     $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(TRUE);
   }
   elseif ($reset == 2) {
-    $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(FALSE ,TRUE);
+    $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(FALSE, TRUE);
   }
 
 }

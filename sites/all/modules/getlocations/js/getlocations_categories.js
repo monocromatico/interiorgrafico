@@ -1,6 +1,7 @@
 
 /**
- * @file getlocations_categories.js
+ * @file
+ * getlocations_categories.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -14,16 +15,22 @@
         var tgt = "#getlocations_toggle_" + c + '_' + k;
         if ($(tgt).is('input')) {
           $(tgt).click( function() {
-            $.each(getlocations_markers[k].lids, function (lid, mark) {
-              if (getlocations_markers[k].cat[lid] == c) {
+            $.each(Drupal.getlocations_markers[k].lids, function (lid, mark) {
+              if (Drupal.getlocations_markers[k].cat[lid] == c) {
                 vis = mark.getVisible();
                 if (vis) {
                   label = l + ' ' + Drupal.t('On');
                   sv = false;
+                  if (Drupal.getlocations_settings[k].useclustermanager) {
+                    Drupal.getlocations_settings[k].cmgr.removeMarker(mark);
+                  }
                 }
                 else {
                   label = l + ' ' + Drupal.t('Off');
                   sv = true;
+                  if (Drupal.getlocations_settings[k].useclustermanager) {
+                    Drupal.getlocations_settings[k].cmgr.addMarker(mark);
+                  }
                 }
                 mark.setVisible(sv);
                 $(tgt).val(label);
@@ -45,4 +52,4 @@
 
     }
   };
-}(jQuery));
+})(jQuery);

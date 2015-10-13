@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_fields_handler_filter_distance.inc
+ * @file
+ * getlocations_fields_handler_filter_distance.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -27,25 +28,27 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     $options['settings']['country']                 = array('default' => variable_get('site_default_country', ''));
     $options['settings']['display_search_distance'] = array('default' => 1);
     $options['settings']['display_search_units']    = array('default' => 1);
+    $options['settings']['geocoder_enable']         = array('default' => 0);
 
     $options['value'] = array(
       'default' => array(
-        'latitude' => '',
-        'longitude' => '',
+        'latitude'        => '',
+        'longitude'       => '',
 #        'postal_code' => '',
 #        'country' => '',
-        'php_code' => '',
-        'nid_arg' => '',
-        'nid_loc_field' => 'node',
-        'uid_arg' => '',
-        'uid_loc_field' => 'user',
-        'tid_arg' => '',
-        'tid_loc_field' => 'taxonomy_term',
-        'cid_arg' => '',
-        'cid_loc_field' => 'comment',
+        'php_code'        => '',
+        'nid_arg'         => '',
+        'nid_loc_field'   => 'node',
+        'uid_arg'         => '',
+        'uid_loc_field'   => 'user',
+        'tid_arg'         => '',
+        'tid_loc_field'   => 'taxonomy_term',
+        'cid_arg'         => '',
+        'cid_loc_field'   => 'comment',
         'search_distance' => 100,
-        'search_units' => 'km',
-        'search_field' => '',
+        'search_units'    => 'km',
+        'search_field'    => '',
+        'gps'             => '',
       ),
     );
 
@@ -115,6 +118,11 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
         TRUE
       );
       $form['settings']['searchbox_size']['#dependency'] = array('edit-options-origin' => array('search'));
+
+      // geocoder type
+      $geocoder_default['geocoder_enable'] = (isset($this->options['settings']['geocoder_enable']) ? $this->options['settings']['geocoder_enable'] : 0);
+      $form['settings'] += getlocations_geocoder_form($geocoder_default);
+
       // country restriction
       $form['settings']['restrict_by_country'] = getlocations_element_map_checkbox(
         t('Restrict by country'),
@@ -132,19 +140,28 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
       $form['settings']['country']['#dependency'] = array('edit-options-origin' => array('search'));
       $form['settings']['country']['#suffix'] = '</div>';
 
+      $getlocations_fields_paths = getlocations_fields_paths_get();
+      $getlocations_paths = getlocations_paths_get();
+
+      $form['#attached']['js'] = array(
+        $getlocations_fields_paths['getlocations_fields_search_views_path'] => array('type' => 'file', 'weight' => 20),
+        $getlocations_paths['getlocations_geo_path'] =>  array('type' => 'file', 'weight' => 21)
+      );
+
       if ($this->options['origin'] == 'search') {
         if (isset($this->options['settings'])) {
           $settings = array(
             'getlocations_fields_search_views' => array(
               'restrict_by_country' => (isset($this->options['settings']['restrict_by_country']) ? $this->options['settings']['restrict_by_country'] : 0),
               'country' => (isset($this->options['settings']['country']) ? $this->options['settings']['country'] : variable_get('site_default_country', '')),
+              'geocoder_enable' => $geocoder_default['geocoder_enable'],
             )
           );
           drupal_add_js($settings, 'setting');
         }
-        $getlocations_fields_paths = getlocations_fields_paths_get();
-        $form['#attached']['js'] = array($getlocations_fields_paths['getlocations_fields_search_views_path']);
-
+        $getlocations_defaults = getlocations_defaults();
+        $getlocations_defaults['geocoder_enable'] = $geocoder_default['geocoder_enable'];
+        getlocations_setup_js($getlocations_defaults, TRUE);
       }
 
     }
@@ -170,11 +187,20 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     $form['value']['longitude'] = getlocations_fields_element_longitude($this->value['longitude']);
     if ($this->options['origin'] == 'search') {
       $form['value']['latitude']['#prefix'] = '<div class="js-hide">';
-       $form['value']['longitude']['#suffix'] = '</div>';
+      $form['value']['longitude']['#suffix'] = '</div>';
     }
     #$form['value']['postal_code'] = getlocations_fields_element_postal_code($this->value['postal_code']);
     #$form['value']['country'] = getlocations_fields_element_country($this->value['country']);
     $form['value']['php_code'] = getlocations_fields_element_php_code($this->value['php_code']);
+
+    // hide something in the DOM so that js knows this is a gps origin
+    if ($this->options['origin'] == 'gps') {
+      $form['value']['gps'] = array(
+        '#type' => 'hidden',
+        '#value' => 'origin',
+        '#dependency' => array('edit-options-origin' => array('gps')),
+      );
+    }
 
     list($nid_argument_options, $uid_argument_options, $tid_argument_options, $cid_argument_options) = getlocations_fields_views_proximity_get_argument_options($this->view);
     $loc_field_options = getlocations_fields_views_proximity_get_location_field_options();
@@ -198,7 +224,11 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
 
     $form['value']['search_units'] = getlocations_element_distance_unit($this->value['search_units']);
     $form['value']['search_distance'] = getlocations_element_search_distance($this->value['search_distance']);
-
+    $form['value']['search_operator'] = array(
+      '#type' => 'hidden',
+      '#value' => $this->options['operator'],
+      '#attributes' => array('id' => array('views_search_operator')),
+    );
   }
 
   function exposed_form(&$form, &$form_state) {
@@ -261,9 +291,11 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     // We need to merge with $this->options['value'] for filter values
     // and $this->value for exposed filter values.
     $options = array_merge($this->options, $this->options['value'], $this->value);
+
     $coordinates = getlocations_fields_views_proximity_get_reference_location($this->view, $options);
+
     // If we don't have any coordinates or distance, there's nothing to filter by, so don't modify the query at all.
-    if (empty($coordinates) || empty($this->value['search_distance'])) {
+    if (empty($coordinates) || ! $coordinates['latitude'] || ! $coordinates['longitude'] || empty($this->value['search_distance'])) {
       return;
     }
 

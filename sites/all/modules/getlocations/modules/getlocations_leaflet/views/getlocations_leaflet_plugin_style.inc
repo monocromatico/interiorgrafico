@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_leaflet_plugin_style.inc
+ * @file
+ * getlocations_leaflet_plugin_style.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -56,7 +57,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
         foreach ($types AS $type => $name) {
           $field_names = getlocations_get_fieldname2($type, 'node');
           foreach ($field_names AS $field_name) {
-            $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
+            $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
             $mmarker = (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'] : $getlocations_defaults['node_map_marker']);
             $options[$mkey] = array('default' => $mmarker);
           }
@@ -113,7 +114,12 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     $form['#theme'] = 'getlocations_leaflet_plugin_style_options_form';
 
     $getlocations_leaflet_paths = getlocations_leaflet_paths_get();
-    $form['#attached']['js'] = array($getlocations_leaflet_paths['getlocations_leaflet_formatter_path']);
+    $getlocations_paths = getlocations_paths_get();
+
+    $form['#attached']['js'] = array(
+      $getlocations_leaflet_paths['getlocations_leaflet_formatter_path'],
+      $getlocations_paths['getlocations_views_path'],
+    );
 
     $handlers = $this->display->handler->get_handlers('field');
     $source_options = array('' => t('None'));
@@ -162,10 +168,11 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
         'awesome_icon_size' => t('Node Awesome icon size'),
         'awesome_icon_type' => t('Node Awesome icon type'),
         'awesome_icon_flip' => t('Node Awesome icon flip and rotate'),
+        'awesome_icon_html' => t('Node Awesome icon HTML'),
+        'awesome_icon_class' => t('Node Awesome icon class'),
       );
       $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, "node");
-      // TODO per content type fieldname etc
-/////////////////
+
       // node type markers
       if ($types = getlocations_get_types()) {
         $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
@@ -175,7 +182,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
             $field_names = getlocations_get_fieldname2($type, 'node');
             foreach ($field_names AS $field_name) {
               $label = t('%name Map marker, field %field' , array('%name' => $name, '%field' => $field_name));
-              $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
+              $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
               $labels = array(
                 'awesome_icon'         => t($label . ' Awesome icon'),
                 'awesome_icon_color'   => t($label . ' Awesome icon color'),
@@ -185,13 +192,15 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
                 'awesome_icon_size'    => t($label . ' Awesome icon size'),
                 'awesome_icon_type'    => t($label . ' Awesome icon type'),
                 'awesome_icon_flip'    => t($label . ' Awesome icon flip and rotate'),
+                'awesome_icon_html'    => t($label . ' Awesome icon HTML'),
+                'awesome_icon_class'   => t($label . ' Awesome icon class'),
               );
               $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, $mkey);
             }
           }
         }
       }
-/////////////////
+
       // users
       if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
         $labels = array(
@@ -203,6 +212,8 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
           'awesome_icon_size' => t('User Awesome icon size'),
           'awesome_icon_type' => t('User Awesome icon type'),
           'awesome_icon_flip' => t('User Awesome icon flip and rotate'),
+          'awesome_icon_html' => t('User Awesome icon HTML'),
+          'awesome_icon_class' => t('User Awesome icon class'),
         );
         $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'user');
       }
@@ -220,6 +231,8 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
             'awesome_icon_size' => t('Vocabulary Awesome icon size'),
             'awesome_icon_type' => t('Vocabulary Awesome icon type'),
             'awesome_icon_flip' => t('Vocabulary Awesome icon flip and rotate'),
+            'awesome_icon_html' => t('Vocabulary Awesome icon HTML'),
+            'awesome_icon_class' => t('Vocabulary Awesome icon class'),
           );
           $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'vocabulary');
 
@@ -235,6 +248,8 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
           'awesome_icon_size' => t('Term Awesome icon size'),
           'awesome_icon_type' => t('Term Awesome icon type'),
           'awesome_icon_flip' => t('Term Awesome icon flip and rotate'),
+          'awesome_icon_html' => t('Term Awesome icon HTML'),
+          'awesome_icon_class' => t('Term Awesome icon class'),
         );
         $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'term');
       }
@@ -249,6 +264,8 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
           'awesome_icon_size' => t('Comment Awesome icon size'),
           'awesome_icon_type' => t('Comment Awesome icon type'),
           'awesome_icon_flip' => t('Comment Awesome icon flip and rotate'),
+          'awesome_icon_html' => t('Comment Awesome icon HTML'),
+          'awesome_icon_class' => t('Comment Awesome icon class'),
         );
         $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'comment');
 
@@ -266,7 +283,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
             $field_names = getlocations_get_fieldname2($type, 'node');
             foreach ($field_names AS $field_name) {
               if (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ) {
-                $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
+                $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
                 $form[$mkey] = getlocations_element_map_marker(
                   t('%name Content Map Marker, field %field', array('%name' => $name, '%field' => $field_name)),
                   $markers,
@@ -361,6 +378,11 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
         );
       }
 
+    }
+
+    // search markers
+    if (module_exists('getlocations_fields') && module_exists('views')) {
+      $form += getlocations_fields_views_search_form($this->options, 'leaflet');
     }
 
     // end markers

@@ -1,5 +1,6 @@
 /**
- * @file getlocations_search_admin.js
+ * @file
+ * getlocations_search_admin.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -464,8 +465,24 @@
         });
       }
 
+      if ($("#edit-getlocations-search-defaults-show-maplinks, #edit-getlocations-search-block-defaults-show-maplinks").is('input')) {
+        if ($("#edit-getlocations-search-defaults-show-maplinks, #edit-getlocations-search-block-defaults-show-maplinks").attr('checked')) {
+          $("#wrap-getlocations-maplinks").show();
+        }
+        else {
+          $("#wrap-getlocations-maplinks").hide();
+        }
+        $("#edit-getlocations-search-defaults-show-maplinks, #edit-getlocations-search-block-defaults-show-maplinks").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-maplinks").show();
+          }
+          else {
+            $("#wrap-getlocations-maplinks").hide();
+          }
+        });
+      }
 
 
     }
   };
-}(jQuery));
+})(jQuery);

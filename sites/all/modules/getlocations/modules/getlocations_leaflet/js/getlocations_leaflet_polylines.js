@@ -1,6 +1,7 @@
 
 /**
- * @file getlocations_leaflet_polylines.js
+ * @file
+ * getlocations_leaflet_polylines.js
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -88,9 +89,9 @@
         }
 
         if (polylines.length) {
-          Lines.addTo(getlocations_leaflet_map[key]);
-          if (getlocations_leaflet_settings[key].map_settings.layercontrol_polyl_ov) {
-            getlocations_leaflet_layerscontrol[key].addOverlay(Lines, getlocations_leaflet_settings[key].map_settings.layercontrol_polyl_ov_label);
+          Lines.addTo(Drupal.getlocations_leaflet_map[key]);
+          if (Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_polyl_ov) {
+            Drupal.getlocations_leaflet_layerscontrol[key].addOverlay(Lines, Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_polyl_ov_label);
           }
         }
 
@@ -98,4 +99,4 @@
 
     }
   };
-}(jQuery));
+})(jQuery);
