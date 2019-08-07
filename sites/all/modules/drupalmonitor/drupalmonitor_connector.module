@@ -4,7 +4,7 @@
  * This file is the core of drupalmonitor_connector
  */
 
-define('DRUPALMONITOR_VERSION', '7.x-1.12');
+define('DRUPALMONITOR_VERSION', '7.x-1.13');
 
 /**
  * Implements hook_menu().
@@ -58,7 +58,7 @@ function drupalmonitor_connector_boot() {
  * Save log entry to db for performance monitoring.
  */
 function drupalmonitor_connector_shutdow() {
-  if (variable_get('drupalmonitor_memory_monitoring', 1) == 1) {
+  if (variable_get('drupalmonitor_performance_monitoring', 1) == 1) {
     db_insert('drupalmonitor_log')
       ->fields(
         array(

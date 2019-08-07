@@ -27,7 +27,6 @@ function drupalmonitor_connector_schema() {
  */
 function drupalmonitor_connector_enable() {
   variable_set('drupalmonitor_hash', md5(microtime() . 'drupalmonitorrocks_salt_666' . time()));
-  variable_set('drupalmonitor_memory_monitoring', 1);
   variable_set('drupalmonitor_performance_monitoring', 1);
   variable_set('drupalmonitor_server_monitoring', 1);
   variable_set('drupalmonitor_user_monitoring', 1);

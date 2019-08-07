@@ -1,5 +1,4 @@
 <?php
-// $Id: demo.module,v 1.39 2010/09/25 17:06:05 sun Exp $
 
 /**
  * @file
@@ -72,12 +71,6 @@ function demo_menu() {
     'weight' => 10,
   );
 
-  $items['demo/autocomplete'] = array(
-    'page callback' => 'demo_autocomplete',
-    'access arguments' => $admin_access,
-    'file' => 'demo.admin.inc',
-    'type' => MENU_CALLBACK,
-  );
   $items['demo/download'] = array(
     'page callback' => 'demo_download',
     'access arguments' => $admin_access,
@@ -119,4 +112,3 @@ function demo_reset($filename, $verbose = TRUE) {
   module_load_include('inc', 'demo', 'demo.admin');
   return _demo_reset($filename, $verbose);
 }
-

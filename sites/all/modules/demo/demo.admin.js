@@ -1,4 +1,7 @@
-// $Id: demo.admin.js,v 1.1 2010/08/30 14:30:49 sun Exp $
+/**
+ * @file
+ */
+
 (function ($) {
 
 /**

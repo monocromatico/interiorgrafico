@@ -4,9 +4,9 @@ core = 7.x
 
 configure = admin/config/system/drupalmonitor
 
-; Information added by Drupal.org packaging script on 2015-09-28
-version = "7.x-1.12"
+; Information added by Drupal.org packaging script on 2018-03-23
+version = "7.x-1.13"
 core = "7.x"
 project = "drupalmonitor"
-datestamp = "1443482940"
+datestamp = "1521808990"
 

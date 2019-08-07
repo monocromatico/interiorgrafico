@@ -1,7 +1,10 @@
 <?php
-// $Id: database_mysql_dump.inc,v 1.20 2010/09/04 00:24:29 sun Exp $
 
-// Some older mysql client libs are missing this constant.
+/**
+ * @file
+ * Some older mysql client libs are missing this constant.
+ */
+
 if (!defined('MYSQLI_BINARY_FLAG')) {
   define('MYSQLI_BINARY_FLAG', 128);
 }
@@ -118,14 +121,15 @@ function _demo_dump_table_schema($fp, $table) {
   $data = db_query("SHOW CREATE TABLE `$table`")->fetchAssoc();
   $status = db_query('SHOW TABLE STATUS LIKE :table', array(':table' => $table))->fetchAssoc();
 
-  // Column keys in $status start with a lower-case letter in PDO and with a
-  // upper-case letter otherwise. We convert all to lower-case.
+  // Capitalization of keys depends on PDO database connection options.
+  // Convert them to lowercase.
+  foreach ($data as $key => $value) {
+    unset($data[$key]);
+    $data[strtolower($key)] = $value;
+  }
   foreach ($status as $key => $value) {
-    $key_lower = strtolower($key);
-    if ($key[0] != $key_lower[0]) {
-      $status[$key_lower] = $value;
-      unset($status[$key]);
-    }
+    unset($status[$key]);
+    $status[strtolower($key)] = $value;
   }
 
   // Add IF NOT EXISTS to CREATE TABLE, replace double quotes with MySQL quotes.
@@ -139,7 +143,6 @@ function _demo_dump_table_schema($fp, $table) {
   //   table definition (after leading ")" on last line) and merge anything
   //   missing into it, and re-append it again. There are too many differences
   //   between MySQL 5.0 and 5.1+, and PHP mysql(i) and pdo_mysql extensions.
-
   // PDO is missing the table engine.
   if (!strpos($output, ' ENGINE=')) {
     $output .= ' ENGINE=' . $status['engine'];
@@ -158,20 +161,14 @@ function _demo_dump_table_schema($fp, $table) {
   // utf8_general_ci as default database collation, if not overridden via
   // settings.php.
   if (!strpos($output, 'COLLATE=')) {
-    // Only if the collation contains a underscore, the first string up to the
-    // first underscore is the character set.
-    // @see PMA_exportDBCreate()
-    if (strpos($status['collation'], '_')) {
-      $collate = 'COLLATE=' . $status['collation'];
-    }
     // If there is a character set defined already, just append the collation.
-    if (strpos($output, 'CHARSET') || strpos($output, 'CHARACTER SET')) {
-      // @todo This may also hit column definitions instead of the table
-      //   definition only. Should technically also be case-insensitive.
-      $output = preg_replace('@((?:DEFAULT )?(?:CHARSET|CHARACTER SET) \w+)@', '$1 ' . $collate, $output);
+    // Only look for the table definition (on the last line); column definitions
+    // may use a special collation, which must not be changed.
+    if (preg_match('@^\).+(?:CHARSET|CHARACTER SET)@m', $output)) {
+      $output = preg_replace('@((?:DEFAULT )?(?:CHARSET|CHARACTER SET) \w+)@', '$1 ', $output);
     }
     else {
-      $output .= ' DEFAULT CHARSET=utf8 ' . $collate;
+      $output .= ' DEFAULT CHARSET=utf8 ';
     }
   }
 
@@ -184,10 +181,9 @@ function _demo_dump_table_schema($fp, $table) {
   }
 
   // @todo Depends on whether we dump data and table existence on import.
-//  if (!empty($status['auto_increment'])) {
-//    $output .= ' AUTO_INCREMENT=' . $status['auto_increment'];
-//  }
-
+  //   if (!empty($status['auto_increment'])) {
+  //    $output .= ' AUTO_INCREMENT=' . $status['auto_increment'];
+  //  }
   $output .= ";\n";
   fwrite($fp, $output);
 }
@@ -216,7 +212,7 @@ function _demo_dump_table_data($fp, $table) {
     // Disable indices to speed up import.
     $output .= "/*!40000 ALTER TABLE $table DISABLE KEYS */;\n";
 
-    // Escape backslashes, PHP code, special chars
+    // Escape backslashes, PHP code, special chars.
     $search = array('\\', "'", "\x00", "\x0a", "\x0d", "\x1a");
     $replace = array('\\\\', "''", '\0', '\n', '\r', '\Z');
 
@@ -230,13 +226,13 @@ function _demo_dump_table_data($fp, $table) {
       $values = array();
       $field = 0;
       foreach ($row as $value) {
-        // NULL
+        // NULL.
         if (!isset($value) || is_null($value)) {
           $values[] = 'NULL';
         }
         // A number
-        // timestamp is numeric on some MySQL 4.1, BLOBs are sometimes numeric
-        else if ($fields[$field]->numeric && !$fields[$field]->timestamp && !$fields[$field]->blob) {
+        // timestamp is numeric on some MySQL 4.1, BLOBs are sometimes numeric.
+        elseif ($fields[$field]->numeric && !$fields[$field]->timestamp && !$fields[$field]->blob) {
           $values[] = $value;
         }
         // A true BLOB
@@ -244,9 +240,9 @@ function _demo_dump_table_data($fp, $table) {
         //   option is used, for fields having the binary attribute
         //   no hex is generated
         // - a TEXT field returns type blob but a real blob
-        //   returns also the 'binary' flag
-        else if ($fields[$field]->binary && $fields[$field]->blob) {
-          // Empty blobs need to be different, but '0' is also empty :-(
+        //   returns also the 'binary' flag.
+        elseif ($fields[$field]->binary && $fields[$field]->blob) {
+          // Empty blobs need to be different, but '0' is also empty :-(.
           if (empty($value) && $value != '0') {
             $values[] = "''";
           }
@@ -254,7 +250,7 @@ function _demo_dump_table_data($fp, $table) {
             $values[] = '0x' . bin2hex($value);
           }
         }
-        // Something else -> treat as a string
+        // Something else -> treat as a string.
         else {
           $values[] = "'" . str_replace($search, $replace, $value) . "'";
         }
@@ -332,8 +328,9 @@ function _demo_table_is_view($table) {
   static $tables = array();
   if (!isset($tables[$table])) {
     $status = db_query('SHOW TABLE STATUS LIKE :table', array(':table' => $table))->fetchAssoc();
-    $tables[$table] = (strtoupper(substr($status['comment'], 0, 4)) == 'VIEW');
+    // Capitalization of keys depends on PDO database connection options.
+    $comment = (isset($status['Comment']) ? $status['Comment'] : $status['comment']);
+    $tables[$table] = (strtoupper(substr($comment, 0, 4)) == 'VIEW');
   }
   return $tables[$table];
 }
-

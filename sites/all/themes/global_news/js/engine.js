@@ -8,7 +8,19 @@ jQuery(window).load(function(){
 });
 
 (function ($) {
-
+/*
+$(document).ready(function () {
+    //Disable full page
+    $('body').bind('cut copy', function (e) {
+        e.preventDefault();
+    });
+    
+    //Disable part of page
+    $('#id').bind('cut copy', function (e) {
+        e.preventDefault();
+    });
+});
+*/
 	/*IG Front*/
      
      $('.view-id-ig_front .views-row').each(function(){
