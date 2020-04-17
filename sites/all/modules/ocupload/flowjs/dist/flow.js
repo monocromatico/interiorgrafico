@@ -2,6 +2,10 @@
  * @license MIT
  */
 (function(window, document, undefined) {'use strict';
+  if (!window || !document) {
+    console.warn('Flowjs needs window and document objects to work');
+    return;
+  }
   // ie10+
   var ie10plus = window.navigator.msPointerEnabled;
   /**
@@ -1279,6 +1283,10 @@
      * @returns {string}
      */
     getTarget: function(target, params){
+      if (params.length == 0) {
+	return target;
+      }
+
       if(target.indexOf('?') < 0) {
         target += '?';
       } else {
@@ -1473,7 +1481,7 @@
     prepareXhrRequest: function(method, isTest, paramsMethod, blob) {
       // Add data from the query options
       var query = evalOpts(this.flowObj.opts.query, this.fileObj, this, isTest);
-      query = extend(query, this.getParams());
+      query = extend(query || {}, this.getParams());
 
       var target = evalOpts(this.flowObj.opts.target, this.fileObj, this, isTest);
       var data = null;
@@ -1609,7 +1617,7 @@
    * Library version
    * @type {string}
    */
-  Flow.version = '2.13.0';
+  Flow.version = '2.13.2';
 
   if ( typeof module === "object" && module && typeof module.exports === "object" ) {
     // Expose Flow as module.exports in loaders that implement the Node
@@ -1632,4 +1640,4 @@
       define( "flow", [], function () { return Flow; } );
     }
   }
-})(window, document);
+})(typeof window !== 'undefined' && window, typeof document !== 'undefined' && document);

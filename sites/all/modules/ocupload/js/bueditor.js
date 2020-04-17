@@ -50,7 +50,7 @@ BUE.postprocess.ocupload = function (E, $) {
   Drupal.ocupload.bueditorPlugin.createFlow = function () {
     Drupal.ocupload.bueditorPlugin.flow = Drupal.ocupload.createFlow();
 
-    if (!Drupal.ocupload.bueditorPlugin.flow.support) {
+    if (!Drupal.ocupload.bueditorPlugin.flow || !Drupal.ocupload.bueditorPlugin.flow.support) {
       return false;
     }
 

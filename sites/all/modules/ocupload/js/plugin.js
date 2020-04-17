@@ -22,11 +22,11 @@ CKEDITOR.plugins.add('OCUpload', {
 
     // Lazy create and configure Flow.js object
     if (!Drupal.ocupload.ckeditorPlugin.flow) {
-      Drupal.ocupload.ckeditorPlugin.createFlow();
+      Drupal.ocupload.ckeditorPlugin.flow = Drupal.ocupload.ckeditorPlugin.createFlow();
     }
 
     // Process upload button
-    if (Drupal.ocupload.ckeditorPlugin.flow.support) {
+    if (Drupal.ocupload.ckeditorPlugin.flow && Drupal.ocupload.ckeditorPlugin.flow.support) {
       editor.on('dataReady', function () {
         jQuery('.cke_button__ocupload').once('ocupload', function () {
           var $button = jQuery(this);
@@ -51,18 +51,16 @@ CKEDITOR.plugins.add('OCUpload', {
    * Create and configure Flow.js object.
    */
   Drupal.ocupload.ckeditorPlugin.createFlow = function () {
-    Drupal.ocupload.ckeditorPlugin.flow = Drupal.ocupload.createFlow();
+    var flow = Drupal.ocupload.createFlow();
 
-    if (!Drupal.ocupload.ckeditorPlugin.flow.support) {
-      return false;
+    if (Drupal.ocupload.ckeditorPlugin.flow && Drupal.ocupload.ckeditorPlugin.flow.support) {
+      flow.on('filesSubmitted', Drupal.ocupload.ckeditorPlugin.onFilesSubmitted);
+      flow.on('fileSuccess', Drupal.ocupload.ckeditorPlugin.onFileSuccess);
+      flow.on('complete', Drupal.ocupload.ckeditorPlugin.onComplete);
+      flow.on('error', Drupal.ocupload.ckeditorPlugin.onComplete);
     }
 
-    Drupal.ocupload.ckeditorPlugin.flow.on('filesSubmitted', Drupal.ocupload.ckeditorPlugin.onFilesSubmitted);
-    Drupal.ocupload.ckeditorPlugin.flow.on('fileSuccess', Drupal.ocupload.ckeditorPlugin.onFileSuccess);
-    Drupal.ocupload.ckeditorPlugin.flow.on('complete', Drupal.ocupload.ckeditorPlugin.onComplete);
-    Drupal.ocupload.ckeditorPlugin.flow.on('error', Drupal.ocupload.ckeditorPlugin.onComplete);
-
-    return true;
+    return flow;
   };
 
   /**

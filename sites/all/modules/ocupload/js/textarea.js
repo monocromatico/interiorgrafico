@@ -36,7 +36,7 @@
   Drupal.ocupload.textareaPlugin.createFlow = function () {
     Drupal.ocupload.textareaPlugin.flow = Drupal.ocupload.createFlow();
 
-    if (!Drupal.ocupload.textareaPlugin.flow.support) {
+    if (!Drupal.ocupload.textareaPlugin.flow || !Drupal.ocupload.textareaPlugin.flow.support) {
       return false;
     }
 
